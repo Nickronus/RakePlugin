@@ -10,20 +10,21 @@
         {
             _kompas3DWrapper.OpenKompas();
             _kompas3DWrapper.CreateDocument3D();
-            _kompas3DWrapper.CreatePart();
 
-            // Создание рамки
-            _kompas3DWrapper.InitializationSketchDefinition();
-            _kompas3DWrapper.CreateFirstRectangleParam(rakeParameters.Parameters[ParameterType.WidthInsideFrame].Value, rakeParameters.Parameters[ParameterType.HeightInsideFrame].Value);
-            _kompas3DWrapper.CreateSecondRectangleParam(rakeParameters.Parameters[ParameterType.FrameWidth].Value, rakeParameters.Parameters[ParameterType.FrameHeight].Value);
-            _kompas3DWrapper.CreateDocument2DForTwoRectangleParam();
-            _kompas3DWrapper.CreateExtrusionParam(rakeParameters.Parameters[ParameterType.FrameThickness].Value);
-
-            // Создание бэк плейта
-            _kompas3DWrapper.InitializationSketchDefinition();
-            _kompas3DWrapper.CreateThirdRectangleParam(rakeParameters.Parameters[ParameterType.WidthInsideFrame].Value, rakeParameters.Parameters[ParameterType.HeightInsideFrame].Value);
-            _kompas3DWrapper.CreateDocument2DForOneRectangleParam();
-            _kompas3DWrapper.CreateExtrusionParam(rakeParameters.Parameters[ParameterType.BackWallThickness].Value);
+            _kompas3DWrapper.CreateWorkingSurface(rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
+                rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
+            _kompas3DWrapper.CreateHandle(rakeParameters.Parameters[ParameterType.HandleDiameter].Value,
+                rakeParameters.Parameters[ParameterType.HandleLength].Value);
+            _kompas3DWrapper.CreateTeeth(rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
+                rakeParameters.Parameters[ParameterType.LengthOfTeeth].Value,
+                rakeParameters.Parameters[ParameterType.NumberOfTeeth].Value,
+                rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value,
+                rakeParameters.Parameters[ParameterType.ToothShape].Value);
+            if(rakeParameters.Parameters[ParameterType.LightweightWorkSurface].Value == 1)
+            {
+                _kompas3DWrapper.CreateHole(rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
+                    rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
+            }
         }
     }
 }

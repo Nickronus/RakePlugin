@@ -9,68 +9,78 @@
 
     public partial class MainForm : Form
     {
-        /// <summary>
-        /// Цвет, если всё правильно.
-        /// </summary>
         private readonly Color _correctСolor = Color.White;
-
-        /// <summary>
-        /// Цвет, если есть ошибка.
-        /// </summary>
         private readonly Color _errorColor = Color.LightPink;
 
         private Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
         {
-            { nameof(WidthInsideFrameTextBox), true },
-            { nameof(HeightInsideFrameTextBox), true },
-            { nameof(FrameWidthTextBox), true },
-            { nameof(FrameHeightTextBox), true },
-            { nameof(FrameThicknessTextBox), true }
+            { nameof(WorkingSurfaceWidthComboBox), true },
+            { nameof(NumberOfTeethComboBox), true },
+            { nameof(LengthOfTeethTextBox), true },
+            { nameof(HandleDiameterTextBox), true },
+            { nameof(HandleLengthTextBox), true },
+            { nameof(WorkingSurfaceLengthComboBox), true },
+            { nameof(ToothShapeComboBox), true },
+            { nameof(LightweightWorkSurfaceComboBox), true }
         };
 
         private RakeParameters _parameters = new RakeParameters();
         private RakeBuilder _builder = new RakeBuilder();
 
-        private Parameter _widthInsideFrame = new Parameter
+        private Parameter _workingSurfaceLength = new Parameter
         {
-            MaxValue = 1200,
-            MinValue = 100,
+            MaxValue =  150,
+            MinValue = 30,
             Value = 100
         };
 
-        private Parameter _heightInsideFrame = new Parameter
+        private Parameter _toothShape = new Parameter
         {
-            MaxValue = 1200,
-            MinValue = 100,
+            MaxValue = (float)ToothShareType.circle,
+            MinValue = (float)ToothShareType.square,
+            Value = (float)ToothShareType.square
+        };
+
+        private Parameter _lightweightWorkSurface = new Parameter
+        {
+            MaxValue = 1,
+            MinValue = 0,
+            Value = 0
+        };
+
+        private Parameter _workingSurfaceWidth = new Parameter
+        {
+            MaxValue = 1290,
+            MinValue = 90,
+            Value = 330
+        };
+
+        private Parameter _numberOfTeeth = new Parameter
+        {
+            MaxValue = 17,
+            MinValue = 5,
+            Value = 5
+        };
+
+        private Parameter _lengthOfTeeth = new Parameter
+        {
+            MaxValue = 200,
+            MinValue = 50,
             Value = 100
         };
 
-        private Parameter _frameWidth = new Parameter
-        {
-            MaxValue = 1210,
-            MinValue = 110,
-            Value = 110
-        };
-
-        private Parameter _frameHeight = new Parameter
-        {
-            MaxValue = 1210,
-            MinValue = 110,
-            Value = 110
-        };
-
-        private Parameter _frameThickness = new Parameter
+        private Parameter _handleDiameter = new Parameter
         {
             MaxValue = 30,
-            MinValue = 10,
-            Value = 10
+            MinValue = 20,
+            Value = 30
         };
 
-        private Parameter _backWallThickness = new Parameter
+        private Parameter _handleLength = new Parameter
         {
-            MaxValue = 2,
-            MinValue = 2,
-            Value = 2
+            MaxValue = 2000,
+            MinValue = 1000,
+            Value = 1000
         };
 
         private ToolTip _toolTip = new ToolTip();
@@ -94,185 +104,154 @@
             BuildFigure.Enabled = true;
         }
 
-        private void CheckingDependentWidthParameters()
-        {
-            if (!Validator.ValidateTwoParameter(_widthInsideFrame, _frameWidth))
-            {
-                WidthInsideFrameTextBox.BackColor = _errorColor;
-                FrameWidthTextBox.BackColor = _errorColor;
-                _dictionaryErrors[nameof(WidthInsideFrameTextBox)] = false;
-                _dictionaryErrors[nameof(FrameWidthTextBox)] = false;
-                _toolTip.SetToolTip(WidthInsideFrameTextBox, "Ширина внутренней рамки не должна превышать ширину внешней рамки");
-                _toolTip.SetToolTip(FrameWidthTextBox, "Ширина внутренней рамки не должна превышать ширину внешней рамки");
-            }
-            else
-            {
-                WidthInsideFrameTextBox.BackColor = _correctСolor;
-                FrameWidthTextBox.BackColor = _correctСolor;
-                _dictionaryErrors[nameof(WidthInsideFrameTextBox)] = true;
-                _dictionaryErrors[nameof(FrameWidthTextBox)] = true;
-                _toolTip.SetToolTip(WidthInsideFrameTextBox, "");
-                _toolTip.SetToolTip(FrameWidthTextBox, "");
-            }
-        }
-
-        private void CheckingDependentHeightParameters()
-        {
-            if (!Validator.ValidateTwoParameter(_heightInsideFrame, _frameHeight))
-            {
-                HeightInsideFrameTextBox.BackColor = _errorColor;
-                FrameHeightTextBox.BackColor = _errorColor;
-                _dictionaryErrors[nameof(HeightInsideFrameTextBox)] = false;
-                _dictionaryErrors[nameof(FrameHeightTextBox)] = false;
-                _toolTip.SetToolTip(HeightInsideFrameTextBox, "Высота внутренней рамки не должна превышать ширину внешней рамки");
-                _toolTip.SetToolTip(FrameHeightTextBox, "Высота внутренней рамки не должна превышать ширину внешней рамки");
-            }
-            else
-            {
-                HeightInsideFrameTextBox.BackColor = _correctСolor;
-                FrameHeightTextBox.BackColor = _correctСolor;
-                _dictionaryErrors[nameof(HeightInsideFrameTextBox)] = true;
-                _dictionaryErrors[nameof(FrameHeightTextBox)] = true;
-                _toolTip.SetToolTip(HeightInsideFrameTextBox, "");
-                _toolTip.SetToolTip(FrameHeightTextBox, "");
-            }
-        }
-
         private void BuildFigureClick(object sender, EventArgs e)
         {
             _parameters.Parameters = new Dictionary<ParameterType, Parameter>
             {
-                {ParameterType.WidthInsideFrame, _widthInsideFrame},
-                {ParameterType.HeightInsideFrame, _heightInsideFrame},
-                {ParameterType.FrameWidth, _frameWidth},
-                {ParameterType.FrameHeight, _frameHeight},
-                {ParameterType.FrameThickness, _frameThickness},
-                {ParameterType.BackWallThickness, _backWallThickness}
+                {ParameterType.WorkingSurfaceWidth, _workingSurfaceWidth},
+                {ParameterType.NumberOfTeeth, _numberOfTeeth},
+                {ParameterType.LengthOfTeeth, _lengthOfTeeth},
+                {ParameterType.HandleDiameter, _handleDiameter},
+                {ParameterType.HandleLength, _handleLength},
+                {ParameterType.WorkingSurfaceLength, _workingSurfaceLength},
+                {ParameterType.ToothShape, _toothShape},
+                {ParameterType.LightweightWorkSurface, _lightweightWorkSurface},
             };
 
             _builder.BuildRake(_parameters);
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        private void MakeTeethSpread()
         {
-
+            _numberOfTeeth.MaxValue = ((_workingSurfaceWidth.Value / 10 - 1) / 2) + 1;
+            _numberOfTeeth.MinValue = (int)((_workingSurfaceWidth.Value / 10 - 1) / 7) + 1;
         }
 
-        private void WidthInsideFrameTextBox_TextChanged(object sender, EventArgs e)
+        private void MakeWorkingSurfaceSpread()
         {
-            if (WidthInsideFrameTextBox.Text != "")
+            _workingSurfaceWidth.MaxValue = ((_numberOfTeeth.Value - 1) * 8 + 1) * 10;
+            _workingSurfaceWidth.MinValue = ((_numberOfTeeth.Value - 1) * 2 + 1) * 10;
+        }
+
+        private void WorkingSurfaceWidthComboBox_TextChanged(object sender, EventArgs e)
+        {
+            if (WorkingSurfaceWidthComboBox.Text != "")
             {
-                _widthInsideFrame.Value = System.Convert.ToSingle(WidthInsideFrameTextBox.Text);
-                if (!Validator.Validate(_widthInsideFrame))
+                WorkingSurfaceWidthComboBox.BackColor = _correctСolor;
+                _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "");
+                _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = true;
+                _workingSurfaceWidth.Value = System.Convert.ToSingle(WorkingSurfaceWidthComboBox.Text);
+                MakeTeethSpread();
+                if (!Validator.Validate(_numberOfTeeth))
                 {
-                    WidthInsideFrameTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(WidthInsideFrameTextBox, "Ширина внутри рамки должна быть в диапазоне от 100 до 1200 мм");
-                    _dictionaryErrors[nameof(WidthInsideFrameTextBox)] = false;
+                    NumberOfTeethComboBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(NumberOfTeethComboBox, "Неподходящее количество зубьев для выбранной ширины рабочей поверхности.");
+                    _dictionaryErrors[nameof(NumberOfTeethComboBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    WidthInsideFrameTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(WidthInsideFrameTextBox, "");
-                    _dictionaryErrors[nameof(WidthInsideFrameTextBox)] = true;
-                    CheckingDependentWidthParameters();
+                    NumberOfTeethComboBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(NumberOfTeethComboBox, "");
+                    _dictionaryErrors[nameof(NumberOfTeethComboBox)] = true;
                     CheckFormOnErrors();
                 }
             }
         }
 
-        private void HeightInsideFrameTextBox_TextChanged(object sender, EventArgs e)
+        private void NumberOfTeethComboBox_TextChanged(object sender, EventArgs e)
         {
-            if (HeightInsideFrameTextBox.Text != "")
+            if (NumberOfTeethComboBox.Text != "")
             {
-                _heightInsideFrame.Value = System.Convert.ToSingle(HeightInsideFrameTextBox.Text);
-                if (!Validator.Validate(_heightInsideFrame))
+                NumberOfTeethComboBox.BackColor = _correctСolor;
+                _toolTip.SetToolTip(NumberOfTeethComboBox, "");
+                _dictionaryErrors[nameof(NumberOfTeethComboBox)] = true;
+                _numberOfTeeth.Value = System.Convert.ToSingle(NumberOfTeethComboBox.Text);
+                MakeWorkingSurfaceSpread();
+                if (!Validator.Validate(_workingSurfaceWidth))
                 {
-                    HeightInsideFrameTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(HeightInsideFrameTextBox, "Высота внутри рамки должна быть в диапазоне от 100 до 1200 мм");
-                    _dictionaryErrors[nameof(HeightInsideFrameTextBox)] = false;
+                    WorkingSurfaceWidthComboBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "Неподходящая ширина рабочей поверхности для выбранного количества зубьев");
+                    _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    HeightInsideFrameTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(HeightInsideFrameTextBox, "");
-                    _dictionaryErrors[nameof(HeightInsideFrameTextBox)] = true;
-                    CheckingDependentHeightParameters();
+                    WorkingSurfaceWidthComboBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "");
+                    _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = true;
                     CheckFormOnErrors();
                 }
             }
         }
 
-        private void FrameWidthTextBox_TextChanged(object sender, EventArgs e)
+        private void LengthOfTeethTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (FrameWidthTextBox.Text != "")
+            if (LengthOfTeethTextBox.Text != "")
             {
-                _frameWidth.Value = System.Convert.ToSingle(FrameWidthTextBox.Text);
-                if (!Validator.Validate(_frameWidth))
+                _lengthOfTeeth.Value = System.Convert.ToSingle(LengthOfTeethTextBox.Text);
+                if (!Validator.Validate(_lengthOfTeeth))
                 {
-                    FrameWidthTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(FrameWidthTextBox, "Ширина внешней рамки должна быть в диапазоне от 110 до 1210 мм");
-                    _dictionaryErrors[nameof(FrameWidthTextBox)] = false;
+                    LengthOfTeethTextBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(LengthOfTeethTextBox, "Длина зубьев должна быть в диапазоне от 50 до 200 мм");
+                    _dictionaryErrors[nameof(LengthOfTeethTextBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    FrameWidthTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(FrameWidthTextBox, "");
-                    _dictionaryErrors[nameof(FrameWidthTextBox)] = true;
-                    CheckingDependentWidthParameters();
+                    LengthOfTeethTextBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(LengthOfTeethTextBox, "");
+                    _dictionaryErrors[nameof(LengthOfTeethTextBox)] = true;
                     CheckFormOnErrors();
                 }
             }
         }
 
-        private void FrameHeightTextBox_TextChanged(object sender, EventArgs e)
+        private void HandleDiametertTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (FrameHeightTextBox.Text != "")
+            if (HandleDiameterTextBox.Text != "")
             {
-                _frameHeight.Value = System.Convert.ToSingle(FrameHeightTextBox.Text);
-                if (!Validator.Validate(_frameHeight))
+                _handleDiameter.Value = System.Convert.ToSingle(HandleDiameterTextBox.Text);
+                if (!Validator.Validate(_handleDiameter))
                 {
-                    FrameHeightTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(FrameHeightTextBox, "Высота внешней рамки должна быть в диапазоне от 110 до 1210 мм");
-                    _dictionaryErrors[nameof(FrameHeightTextBox)] = false;
+                    HandleDiameterTextBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(HandleDiameterTextBox, "Диаметр ручки должен быть в диапазоне от 20 до 30 мм");
+                    _dictionaryErrors[nameof(HandleDiameterTextBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    FrameHeightTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(FrameHeightTextBox, "");
-                    _dictionaryErrors[nameof(FrameHeightTextBox)] = true;
-                    CheckingDependentHeightParameters();
+                    HandleDiameterTextBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(HandleDiameterTextBox, "");
+                    _dictionaryErrors[nameof(HandleDiameterTextBox)] = true;
                     CheckFormOnErrors();
                 }
             }
         }
 
-        private void FrameThicknessTextBox_TextChanged(object sender, EventArgs e)
+        private void HandleLengthTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (FrameThicknessTextBox.Text != "")
+            if (HandleLengthTextBox.Text != "")
             {
-                _frameThickness.Value = System.Convert.ToSingle(FrameThicknessTextBox.Text);
-                if (!Validator.Validate(_frameThickness))
+                _handleLength.Value = System.Convert.ToSingle(HandleLengthTextBox.Text);
+                if (!Validator.Validate(_handleLength))
                 {
-                    FrameThicknessTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(FrameThicknessTextBox, "Толщина рамки должна быть в диапазоне от 10 до 30 мм");
-                    _dictionaryErrors[nameof(FrameThicknessTextBox)] = false;
+                    HandleLengthTextBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(HandleLengthTextBox, "Длина ручки должна быть в диапазоне от 1000 до 2000 мм");
+                    _dictionaryErrors[nameof(HandleLengthTextBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    FrameThicknessTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(FrameThicknessTextBox, "");
-                    _dictionaryErrors[nameof(FrameThicknessTextBox)] = true;
+                    HandleLengthTextBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(HandleLengthTextBox, "");
+                    _dictionaryErrors[nameof(HandleLengthTextBox)] = true;
                     CheckFormOnErrors();
                 }
             }
         }
-
-        private void WidthInsideFrameTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        
+        private void KeyPress(KeyPressEventArgs e)
         {
             char number = e.KeyChar;
             if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
@@ -281,45 +260,101 @@
             }
         }
 
-        private void HeightInsideFrameTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void LengthOfTeethTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            char number = e.KeyChar;
-            if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
+            KeyPress(e);
+        }
+
+        private void HandleDiameterTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            KeyPress(e);
+        }
+
+        private void HandleLengthTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            KeyPress(e);
+        }
+
+        private void ToothShapeComboBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ToothShapeComboBox.Text != "")
             {
-                e.Handled = true;
+                _toothShape.Value = -1;
+                if (ToothShapeComboBox.Text == "Квадрат")
+                {
+                    _toothShape.Value = 0;
+                }
+                if (ToothShapeComboBox.Text == "Круг")
+                {
+                    _toothShape.Value = 1;
+                }
+                if (!Validator.Validate(_toothShape))
+                {
+                    ToothShapeComboBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(ToothShapeComboBox, "Неверное значение поля формы зуба");
+                    _dictionaryErrors[nameof(ToothShapeComboBox)] = false;
+                    CheckFormOnErrors();
+                }
+                else
+                {
+                    ToothShapeComboBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(ToothShapeComboBox, "");
+                    _dictionaryErrors[nameof(ToothShapeComboBox)] = true;
+                    CheckFormOnErrors();
+                }
             }
         }
 
-        private void FrameWidthTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void WorkingSurfaceLengthComboBox_TextChanged(object sender, EventArgs e)
         {
-            char number = e.KeyChar;
-            if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
+            if (WorkingSurfaceLengthComboBox.Text != "")
             {
-                e.Handled = true;
+                _workingSurfaceLength.Value = System.Convert.ToSingle(WorkingSurfaceLengthComboBox.Text);
+                if (!Validator.Validate(_workingSurfaceLength))
+                {
+                    WorkingSurfaceLengthComboBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(WorkingSurfaceLengthComboBox, "Неверное значение поля длины рабочей поверхности");
+                    _dictionaryErrors[nameof(WorkingSurfaceLengthComboBox)] = false;
+                    CheckFormOnErrors();
+                }
+                else
+                {
+                    WorkingSurfaceLengthComboBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(WorkingSurfaceLengthComboBox, "");
+                    _dictionaryErrors[nameof(WorkingSurfaceLengthComboBox)] = true;
+                    CheckFormOnErrors();
+                }
             }
         }
 
-        private void FrameHeightTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void LightweightWorkSurfaceComboBox_TextChanged(object sender, EventArgs e)
         {
-            char number = e.KeyChar;
-            if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
+            if (LightweightWorkSurfaceComboBox.Text != "")
             {
-                e.Handled = true;
+                _lightweightWorkSurface.Value = -1;
+                if (LightweightWorkSurfaceComboBox.Text == "Нет")
+                {
+                    _lightweightWorkSurface.Value = 0;
+                }
+                if (LightweightWorkSurfaceComboBox.Text == "Да")
+                {
+                    _lightweightWorkSurface.Value = 1;
+                }
+                if (!Validator.Validate(_lightweightWorkSurface))
+                {
+                    LightweightWorkSurfaceComboBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(LightweightWorkSurfaceComboBox, "Неверное значение поля облегчённости рабочей поверхности");
+                    _dictionaryErrors[nameof(LightweightWorkSurfaceComboBox)] = false;
+                    CheckFormOnErrors();
+                }
+                else
+                {
+                    LightweightWorkSurfaceComboBox.BackColor = _correctСolor;
+                    _toolTip.SetToolTip(LightweightWorkSurfaceComboBox, "");
+                    _dictionaryErrors[nameof(LightweightWorkSurfaceComboBox)] = true;
+                    CheckFormOnErrors();
+                }
             }
-        }
-
-        private void FrameThicknessTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            char number = e.KeyChar;
-            if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

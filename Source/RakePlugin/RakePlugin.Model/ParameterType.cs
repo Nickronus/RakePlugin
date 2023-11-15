@@ -2,11 +2,19 @@
 {
     public enum ParameterType
     {
-        WidthInsideFrame,
-        HeightInsideFrame,
-        FrameWidth,
-        FrameHeight,
-        FrameThickness,
-        BackWallThickness
+        WorkingSurfaceWidth,
+        NumberOfTeeth,
+        LengthOfTeeth,
+        HandleDiameter,
+        HandleLength,
+        WorkingSurfaceLength,
+        ToothShape,
+        LightweightWorkSurface
+    }
+
+    public enum ToothShareType
+    {
+        square = 0,
+        circle = 1
     }
 }

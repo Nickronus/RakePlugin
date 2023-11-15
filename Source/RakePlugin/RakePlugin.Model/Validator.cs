@@ -10,14 +10,5 @@
             }
             return true;
         }
-
-        public static bool ValidateTwoParameter(Parameter firstParameter, Parameter secondParameter)
-        {
-            if ((secondParameter.Value - firstParameter.Value) >= 10 && (secondParameter.Value - firstParameter.Value) <= 50)
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace RakePlugin.Model
 {
+    /// <summary>
+    /// Тип параметра
+    /// </summary>
     public enum ParameterType
     {
         WorkingSurfaceWidth,
@@ -12,6 +15,9 @@
         LightweightWorkSurface
     }
 
+    /// <summary>
+    /// Тип зубца
+    /// </summary>
     public enum ToothShareType
     {
         square = 0,

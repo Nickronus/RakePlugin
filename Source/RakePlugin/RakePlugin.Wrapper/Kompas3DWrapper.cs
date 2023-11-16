@@ -8,22 +8,69 @@
     using System.Reflection;
     using System.Xml.Linq;
 
+    /// <summary>
+    /// Класс взаимодействия с API Компаса
+    /// </summary>
     public class Kompas3DWrapper
     {
+        /// <summary>
+        /// Объект
+        /// </summary>
         private KompasObject KompasObject { get; set; }
-        private ksDocument3D Document3D { get; set; }
-        private ksPart Part { get; set; }
-        private ksEntity Sketch { get; set; }
-        private ksSketchDefinition DefinitionSketch { get; set; }
-        private ksDocument2D Document2D { get; set; }
-        private ksEntity EntityExtr { get; set; }
-        private ksBossExtrusionDefinition ExtrusionDef { get; set; }
-        private ksCutExtrusionDefinition CutDef { get; set; }
-        private ksExtrusionParam ExtrProp { get; set; }
-        private ksRectangleParam WorkingSurfaceParam { get; set; }
-        private ksRectangleParam SecondRectangleParam { get; set; }
-        private ksRectangleParam ThirdRectangleParam { get; set; }
 
+        /// <summary>
+        /// 3D документ
+        /// </summary>
+        private ksDocument3D Document3D { get; set; }
+
+        /// <summary>
+        /// Часть
+        /// </summary>
+        private ksPart Part { get; set; }
+
+        /// <summary>
+        /// Эскиз 
+        /// </summary>
+        private ksEntity Sketch { get; set; }
+
+        /// <summary>
+        /// Описание эскиза
+        /// </summary>
+        private ksSketchDefinition DefinitionSketch { get; set; }
+
+        /// <summary>
+        /// 2D документ
+        /// </summary>
+        private ksDocument2D Document2D { get; set; }
+
+        /// <summary>
+        /// Сущность
+        /// </summary>
+        private ksEntity EntityExtr { get; set; }
+
+        /// <summary>
+        /// Выдавливание
+        /// </summary>
+        private ksBossExtrusionDefinition ExtrusionDef { get; set; }
+
+        /// <summary>
+        /// Вырезание выдавливанием
+        /// </summary>
+        private ksCutExtrusionDefinition CutDef { get; set; }
+
+        /// <summary>
+        /// Параметр выдавливания
+        /// </summary>
+        private ksExtrusionParam ExtrProp { get; set; }
+        
+        /// <summary>
+        /// Параметр рабочей поверхности
+        /// </summary>
+        private ksRectangleParam WorkingSurfaceParam { get; set; }
+
+        /// <summary>
+        /// Метод запуска Компаса
+        /// </summary>
         public void OpenKompas()
         {
             Type type = Type.GetTypeFromProgID("KOMPAS.Application.5");
@@ -32,17 +79,26 @@
             KompasObject.ActivateControllerAPI();
         }
 
+        /// <summary>
+        /// Метод создания документа 3D
+        /// </summary>
         public void CreateDocument3D()
         {
             Document3D = (ksDocument3D)KompasObject.Document3D();
             Document3D.Create(false /*видимый*/, true /*деталь*/);
         }
 
+        /// <summary>
+        /// Методж создания части
+        /// </summary>
         public void CreatePart()
         {
             Part = Document3D.GetPart((short)Part_Type.pTop_Part);
         }
 
+        /// <summary>
+        /// Метод создания Эскиза по плоскости XOY
+        /// </summary>
         public void InitializationSketchDefinitionXOY()
         {
             Sketch = Part.NewEntity((short)Obj3dType.o3d_sketch);
@@ -51,6 +107,9 @@
             Sketch.Create();
         }
 
+        /// <summary>
+        /// Метод создания эскиза по плосксти XOZ
+        /// </summary>
         public void InitializationSketchDefinitionXOZ()
         {
 
@@ -60,6 +119,10 @@
             Sketch.Create();
         }
 
+        /// <summary>
+        /// Создание 2D документа по одному параметру прямоугольника
+        /// </summary>
+        /// <param name="ksRectangleParam">Параметрт прямоугольника</param>
         public void CreateDocument2DForOneRectangleParam(ksRectangleParam ksRectangleParam)
         {
             Document2D = DefinitionSketch.BeginEdit();
@@ -67,6 +130,11 @@
             DefinitionSketch.EndEdit();
         }
 
+        /// <summary>
+        /// Метод создания рабочей поверхности
+        /// </summary>
+        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности</param>
+        /// <param name="workingSurfaceLength">Длина рабочей поверхности</param>
         public void CreateWorkingSurface(float workingSurfaceWidth, float workingSurfaceLength)
         {
             CreatePart();
@@ -86,6 +154,11 @@
             CreateExtrusionParam(workingSurfaceLength, true);
         }
 
+        /// <summary>
+        /// Метод создания ручки
+        /// </summary>
+        /// <param name="handleDiameter">Диаметр ручки</param>
+        /// <param name="handleLength">Длина ручки</param>
         public void CreateHandle(float handleDiameter, float handleLength)
         {
             InitializationSketchDefinitionXOY();
@@ -97,6 +170,14 @@
             CreateExtrusionParam(handleLength, false);
         }
 
+        /// <summary>
+        /// Метод создания зубца
+        /// </summary>
+        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности</param>
+        /// <param name="lengthOfTeeth">Длина зубца</param>
+        /// <param name="numberOfTeeth">Количество зубцов</param>
+        /// <param name="workingSurfaceLength">Длина рабочей поверхности</param>
+        /// <param name="toothShape">Вид зубца</param>
         public void CreateTeeth(float workingSurfaceWidth, float lengthOfTeeth, float numberOfTeeth, float workingSurfaceLength, float toothShape)
         {    
             float distanceBetweenTeeth = ((workingSurfaceWidth / 10 - numberOfTeeth) / (numberOfTeeth - 1) * 10) + 10;
@@ -129,6 +210,11 @@
             }
         }
 
+        /// <summary>
+        /// Метод вырезания выдавливанием
+        /// </summary>
+        /// <param name="normal">Нормальное направление</param>
+        /// <param name="value">Значение</param>
         private void Cut(bool normal, int value)
         {
             EntityExtr = (ksEntity)Part.NewEntity((short)Obj3dType.o3d_cutExtrusion);
@@ -152,6 +238,11 @@
             EntityExtr.Create();
         }
 
+        /// <summary>
+        /// Метод создания дырки
+        /// </summary>
+        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности</param>
+        /// <param name="workingSurfaceLength">Длина рабочей поверхности</param>
         public void CreateHole(float workingSurfaceWidth, float workingSurfaceLength)
         {
             CreatePart();
@@ -173,6 +264,11 @@
             Cut(false, 15);
         }
 
+        /// <summary>
+        /// Метод создания параметра выдавливания
+        /// </summary>
+        /// <param name="value">Значение</param>
+        /// <param name="normal">Нормальное направление</param>
         public void CreateExtrusionParam(float value, bool normal)
         {
             EntityExtr = (ksEntity)Part.NewEntity((short)Obj3dType.o3d_bossExtrusion);

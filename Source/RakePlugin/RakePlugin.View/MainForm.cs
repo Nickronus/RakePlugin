@@ -8,22 +8,22 @@
     using RakePlugin.Wrapper;
 
     /// <summary>
-    /// Класс главной формы
+    /// Класс главной формы.
     /// </summary>
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Цвет корректного значения
+        /// Цвет корректного значения.
         /// </summary>
         private readonly Color _correctСolor = Color.White;
 
         /// <summary>
-        /// Цвет ошибочного значения
+        /// Цвет ошибочного значения.
         /// </summary>
         private readonly Color _errorColor = Color.LightPink;
 
         /// <summary>
-        /// Словарь ошибок
+        /// Словарь ошибок.
         /// </summary>
         private Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
         {
@@ -38,27 +38,27 @@
         };
 
         /// <summary>
-        /// Параметры грабель
+        /// Параметры грабель.
         /// </summary>
         private RakeParameters _parameters = new RakeParameters();
 
         /// <summary>
-        /// Построитель грабель
+        /// Построитель грабель.
         /// </summary>
         private RakeBuilder _builder = new RakeBuilder();
 
         /// <summary>
-        /// Длина рабочей поверхности
+        /// Длина рабочей поверхности.
         /// </summary>
         private Parameter _workingSurfaceLength = new Parameter
         {
-            MaxValue =  150,
+            MaxValue = 150,
             MinValue = 30,
             Value = 100
         };
 
         /// <summary>
-        /// Тип зубца
+        /// Тип зубца.
         /// </summary>
         private Parameter _toothShape = new Parameter
         {
@@ -68,7 +68,7 @@
         };
 
         /// <summary>
-        /// Вид рабочей поверхности
+        /// Вид рабочей поверхности.
         /// </summary>
         private Parameter _lightweightWorkSurface = new Parameter
         {
@@ -78,7 +78,7 @@
         };
 
         /// <summary>
-        /// Ширина рабочей поверхности
+        /// Ширина рабочей поверхности.
         /// </summary>
         private Parameter _workingSurfaceWidth = new Parameter
         {
@@ -88,7 +88,7 @@
         };
 
         /// <summary>
-        /// Количество зубцов
+        /// Количество зубцов.
         /// </summary>
         private Parameter _numberOfTeeth = new Parameter
         {
@@ -98,7 +98,7 @@
         };
 
         /// <summary>
-        /// Длина зубца
+        /// Длина зубца.
         /// </summary>
         private Parameter _lengthOfTeeth = new Parameter
         {
@@ -108,7 +108,7 @@
         };
 
         /// <summary>
-        /// Диаметр ручки
+        /// Диаметр ручки.
         /// </summary>
         private Parameter _handleDiameter = new Parameter
         {
@@ -118,7 +118,7 @@
         };
 
         /// <summary>
-        /// Длина ручки
+        /// Длина ручки.
         /// </summary>
         private Parameter _handleLength = new Parameter
         {
@@ -128,12 +128,12 @@
         };
 
         /// <summary>
-        /// Всплывающее окно
+        /// Всплывающее окно.
         /// </summary>
         private ToolTip _toolTip = new ToolTip();
 
         /// <summary>
-        /// Инициализация главного окна
+        /// Инициализация главного окна.
         /// </summary>
         public MainForm()
         {
@@ -141,7 +141,7 @@
         }
 
         /// <summary>
-        /// Проверка формы на ошибки
+        /// Проверка формы на ошибки.
         /// </summary>
         private void CheckFormOnErrors()
         {
@@ -153,11 +153,12 @@
                     return;
                 }
             }
+
             BuildFigure.Enabled = true;
         }
 
         /// <summary>
-        /// Построение фигуры
+        /// Построение фигуры.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -165,35 +166,35 @@
         {
             _parameters.Parameters = new Dictionary<ParameterType, Parameter>
             {
-                {ParameterType.WorkingSurfaceWidth, _workingSurfaceWidth},
-                {ParameterType.NumberOfTeeth, _numberOfTeeth},
-                {ParameterType.LengthOfTeeth, _lengthOfTeeth},
-                {ParameterType.HandleDiameter, _handleDiameter},
-                {ParameterType.HandleLength, _handleLength},
-                {ParameterType.WorkingSurfaceLength, _workingSurfaceLength},
-                {ParameterType.ToothShape, _toothShape},
-                {ParameterType.LightweightWorkSurface, _lightweightWorkSurface},
+                { ParameterType.WorkingSurfaceWidth, _workingSurfaceWidth},
+                { ParameterType.NumberOfTeeth, _numberOfTeeth},
+                { ParameterType.LengthOfTeeth, _lengthOfTeeth},
+                { ParameterType.HandleDiameter, _handleDiameter},
+                { ParameterType.HandleLength, _handleLength},
+                { ParameterType.WorkingSurfaceLength, _workingSurfaceLength},
+                { ParameterType.ToothShape, _toothShape},
+                { ParameterType.LightweightWorkSurface, _lightweightWorkSurface},
             };
 
             _builder.BuildRake(_parameters);
         }
 
         /// <summary>
-        /// Создать разброс количества зубцов
+        /// Создать разброс количества зубцов.
         /// </summary>
         private void MakeTeethSpread()
         {
-            _numberOfTeeth.MaxValue = ((_workingSurfaceWidth.Value / 10 - 1) / 2) + 1;
-            _numberOfTeeth.MinValue = (int)((_workingSurfaceWidth.Value / 10 - 1) / 7) + 1;
+            _numberOfTeeth.MaxValue = (((_workingSurfaceWidth.Value / 10) - 1) / 2) + 1;
+            _numberOfTeeth.MinValue = (int)(((_workingSurfaceWidth.Value / 1) - 1) / 7) + 1;
         }
 
         /// <summary>
-        /// Создать разброс ширины рабочей поверхности
+        /// Создать разброс ширины рабочей поверхности.
         /// </summary>
         private void MakeWorkingSurfaceSpread()
         {
-            _workingSurfaceWidth.MaxValue = ((_numberOfTeeth.Value - 1) * 8 + 1) * 10;
-            _workingSurfaceWidth.MinValue = ((_numberOfTeeth.Value - 1) * 2 + 1) * 10;
+            _workingSurfaceWidth.MaxValue = (((_numberOfTeeth.Value - 1) * 8) + 1) * 10;
+            _workingSurfaceWidth.MinValue = (((_numberOfTeeth.Value - 1) * 2) + 1) * 10;
         }
 
         private void WorkingSurfaceWidthComboBox_TextChanged(object sender, EventArgs e)
@@ -313,11 +314,11 @@
                 }
             }
         }
-        
+
         private void KeyPress(KeyPressEventArgs e)
         {
             char number = e.KeyChar;
-            if (!Char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
+            if (!char.IsDigit(number) && number != 8 && number != 44) // цифры, клавиша BackSpace и запятая
             {
                 e.Handled = true;
             }
@@ -347,10 +348,12 @@
                 {
                     _toothShape.Value = 0;
                 }
+
                 if (ToothShapeComboBox.Text == "Круг")
                 {
                     _toothShape.Value = 1;
                 }
+
                 if (!Validator.Validate(_toothShape))
                 {
                     ToothShapeComboBox.BackColor = _errorColor;
@@ -399,10 +402,12 @@
                 {
                     _lightweightWorkSurface.Value = 0;
                 }
+
                 if (LightweightWorkSurfaceComboBox.Text == "Да")
                 {
                     _lightweightWorkSurface.Value = 1;
                 }
+
                 if (!Validator.Validate(_lightweightWorkSurface))
                 {
                     LightweightWorkSurfaceComboBox.BackColor = _errorColor;

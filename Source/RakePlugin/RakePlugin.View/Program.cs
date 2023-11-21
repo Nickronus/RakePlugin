@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace RakePlugin.View
+﻿namespace RakePlugin.View
 {
+    using System;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Программа.
+    /// </summary>
     internal static class Program
     {
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

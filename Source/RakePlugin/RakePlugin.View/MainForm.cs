@@ -25,10 +25,10 @@
         /// <summary>
         /// Словарь ошибок.
         /// </summary>
-        private Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
+        private readonly Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
         {
-            { nameof(WorkingSurfaceWidthComboBox), true },
-            { nameof(NumberOfTeethComboBox), true },
+            { nameof(WorkingSurfaceWidthTextBox), true },
+            { nameof(NumberOfTeethTextBox), true },
             { nameof(LengthOfTeethTextBox), true },
             { nameof(HandleDiameterTextBox), true },
             { nameof(HandleLengthTextBox), true },
@@ -40,17 +40,24 @@
         /// <summary>
         /// Параметры грабель.
         /// </summary>
-        private RakeParameters _parameters = new RakeParameters();
+        private readonly RakeParameters _parameters = new RakeParameters();
 
         /// <summary>
         /// Построитель грабель.
         /// </summary>
-        private RakeBuilder _builder = new RakeBuilder();
+        private readonly RakeBuilder _builder = new RakeBuilder();
+
+        private readonly Parameter _distanceBetweenTeeth = new Parameter
+        {
+            MaxValue = 100,
+            MinValue = 10,
+            Value = 10
+        };
 
         /// <summary>
         /// Длина рабочей поверхности.
         /// </summary>
-        private Parameter _workingSurfaceLength = new Parameter
+        private readonly Parameter _workingSurfaceLength = new Parameter
         {
             MaxValue = 150,
             MinValue = 30,
@@ -60,7 +67,7 @@
         /// <summary>
         /// Тип зубца.
         /// </summary>
-        private Parameter _toothShape = new Parameter
+        private readonly Parameter _toothShape = new Parameter
         {
             MaxValue = (float)ToothShareType.circle,
             MinValue = (float)ToothShareType.square,
@@ -70,7 +77,7 @@
         /// <summary>
         /// Вид рабочей поверхности.
         /// </summary>
-        private Parameter _lightweightWorkSurface = new Parameter
+        private readonly Parameter _lightweightWorkSurface = new Parameter
         {
             MaxValue = 1,
             MinValue = 0,
@@ -80,27 +87,27 @@
         /// <summary>
         /// Ширина рабочей поверхности.
         /// </summary>
-        private Parameter _workingSurfaceWidth = new Parameter
+        private readonly Parameter _workingSurfaceWidth = new Parameter
         {
-            MaxValue = 1290,
-            MinValue = 90,
+            MaxValue = 1010,
+            MinValue = 120,
             Value = 330
         };
 
         /// <summary>
         /// Количество зубцов.
         /// </summary>
-        private Parameter _numberOfTeeth = new Parameter
+        private readonly Parameter _numberOfTeeth = new Parameter
         {
-            MaxValue = 17,
-            MinValue = 5,
-            Value = 5
+            MaxValue = 51,
+            MinValue = 2,
+            Value = 9
         };
 
         /// <summary>
         /// Длина зубца.
         /// </summary>
-        private Parameter _lengthOfTeeth = new Parameter
+        private readonly Parameter _lengthOfTeeth = new Parameter
         {
             MaxValue = 200,
             MinValue = 50,
@@ -110,7 +117,7 @@
         /// <summary>
         /// Диаметр ручки.
         /// </summary>
-        private Parameter _handleDiameter = new Parameter
+        private readonly Parameter _handleDiameter = new Parameter
         {
             MaxValue = 30,
             MinValue = 20,
@@ -120,7 +127,7 @@
         /// <summary>
         /// Длина ручки.
         /// </summary>
-        private Parameter _handleLength = new Parameter
+        private readonly Parameter _handleLength = new Parameter
         {
             MaxValue = 2000,
             MinValue = 1000,
@@ -128,9 +135,35 @@
         };
 
         /// <summary>
+        /// Счётчик запуска построений в Компасе.
+        /// </summary>
+        private readonly Parameter _KompasOpenedCounter = new Parameter
+        {
+            Value = 0
+        };
+
+        /// <summary>
+        /// Счётчик запуска построений в Solidworks.
+        /// </summary>
+        private readonly Parameter _SolidWorksOpenedCounter = new Parameter
+        {
+            Value = 0
+        };
+
+        /// <summary>
+        /// Экзкмпляр Kompas3DWrapper.
+        /// </summary>
+        private Kompas3DWrapper _Kompas3DWrapper { get; set; } = new Kompas3DWrapper();
+
+        /// <summary>
+        /// Экземпляр SolidWorksWrapper.
+        /// </summary>
+        private SolidWorksWrapper _SolidWorksWrapper { get; set; } = new SolidWorksWrapper();
+
+        /// <summary>
         /// Всплывающее окно.
         /// </summary>
-        private ToolTip _toolTip = new ToolTip();
+        private readonly ToolTip _toolTip = new ToolTip();
 
         /// <summary>
         /// Инициализация главного окна.
@@ -158,12 +191,81 @@
         }
 
         /// <summary>
+        /// Фабрика построителей.
+        /// </summary>
+        /// <returns>Возвращает построитель.</returns>
+        private I3DWrapper WrapperFactory()
+        {
+            if (saprComboBox.Text == "Компас 3D")
+            {
+                return _Kompas3DWrapper;
+            }
+
+            if (saprComboBox.Text == "SolidWorks")
+            {
+                return _SolidWorksWrapper;
+            }
+
+            return new Kompas3DWrapper();
+        }
+
+        /// <summary>
+        /// Проверка открытости САПР.
+        /// </summary>
+        /// <returns>Возвращает правду о сапре.</returns>
+        private bool IsSaprOpened()
+        {
+            if (saprComboBox.Text == "Компас 3D")
+            {
+                if (_KompasOpenedCounter.Value == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            if (saprComboBox.Text == "SolidWorks")
+            {
+                if (_SolidWorksOpenedCounter.Value == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Делает значение открытости сапры валидными.
+        /// </summary>
+        private void SaprOpenedCounterValidator()
+        {
+            if (saprComboBox.Text == "Компас 3D")
+            {
+                _KompasOpenedCounter.Value++;
+            }
+
+            if (saprComboBox.Text == "SolidWorks")
+            {
+                _SolidWorksOpenedCounter.Value++;
+            }
+        }
+
+        /// <summary>
         /// Построение фигуры.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BuildFigureClick(object sender, EventArgs e)
         {
+            MakeDistanceBetweenTeeth();
             _parameters.Parameters = new Dictionary<ParameterType, Parameter>
             {
                 { ParameterType.WorkingSurfaceWidth, _workingSurfaceWidth},
@@ -174,77 +276,116 @@
                 { ParameterType.WorkingSurfaceLength, _workingSurfaceLength},
                 { ParameterType.ToothShape, _toothShape},
                 { ParameterType.LightweightWorkSurface, _lightweightWorkSurface},
+                { ParameterType.DistanceBetweenTeeth, _distanceBetweenTeeth}
             };
 
-            _builder.BuildRake(_parameters);
-        }
+            _builder.BuildRake(_parameters, WrapperFactory(), IsSaprOpened());
+            SaprOpenedCounterValidator();
+    }
 
         /// <summary>
         /// Создать разброс количества зубцов.
         /// </summary>
         private void MakeTeethSpread()
         {
-            _numberOfTeeth.MaxValue = (((_workingSurfaceWidth.Value / 10) - 1) / 2) + 1;
-            _numberOfTeeth.MinValue = (int)(((_workingSurfaceWidth.Value / 1) - 1) / 7) + 1;
+            _numberOfTeeth.MaxValue = (int)(((_workingSurfaceWidth.Value / 10) - 1) / 2) + 1;
+            _numberOfTeeth.MinValue = (int)(((_workingSurfaceWidth.Value / 10) - 1) / 10) + 1;
         }
 
         /// <summary>
-        /// Создать разброс ширины рабочей поверхности.
+        /// Создать разброс ширины рабочей поверхности
         /// </summary>
         private void MakeWorkingSurfaceSpread()
         {
-            _workingSurfaceWidth.MaxValue = (((_numberOfTeeth.Value - 1) * 8) + 1) * 10;
+            _workingSurfaceWidth.MaxValue = (((_numberOfTeeth.Value - 1) * 11) + 1) * 10;
             _workingSurfaceWidth.MinValue = (((_numberOfTeeth.Value - 1) * 2) + 1) * 10;
         }
 
-        private void WorkingSurfaceWidthComboBox_TextChanged(object sender, EventArgs e)
+        private void MakeDistanceBetweenTeeth()
         {
-            if (WorkingSurfaceWidthComboBox.Text != "")
+            _distanceBetweenTeeth.Value = (((_workingSurfaceWidth.Value / 10) - _numberOfTeeth.Value) / (_numberOfTeeth.Value - 1) * 10) + 10;
+        }
+
+        private void WorkingSurfaceWidthTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (WorkingSurfaceWidthTextBox.Text != "")
             {
-                WorkingSurfaceWidthComboBox.BackColor = _correctСolor;
-                _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "");
-                _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = true;
-                _workingSurfaceWidth.Value = System.Convert.ToSingle(WorkingSurfaceWidthComboBox.Text);
+                WorkingSurfaceWidthTextBox.BackColor = _correctСolor;
+                _workingSurfaceWidth.MaxValue = 1010;
+                _workingSurfaceWidth.MinValue = 120;
+                _toolTip.SetToolTip(WorkingSurfaceWidthTextBox, "");
+                _dictionaryErrors[nameof(WorkingSurfaceWidthTextBox)] = true;
+                _workingSurfaceWidth.Value = System.Convert.ToSingle(WorkingSurfaceWidthTextBox.Text);
                 MakeTeethSpread();
-                if (!Validator.Validate(_numberOfTeeth))
+                if (!Validator.Validate(_workingSurfaceWidth))
                 {
-                    NumberOfTeethComboBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(NumberOfTeethComboBox, "Неподходящее количество зубьев для выбранной ширины рабочей поверхности.");
-                    _dictionaryErrors[nameof(NumberOfTeethComboBox)] = false;
+                    WorkingSurfaceWidthTextBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(WorkingSurfaceWidthTextBox, "Неподходящая ширина рабочей поверхности.");
+                    _dictionaryErrors[nameof(WorkingSurfaceWidthTextBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    NumberOfTeethComboBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(NumberOfTeethComboBox, "");
-                    _dictionaryErrors[nameof(NumberOfTeethComboBox)] = true;
-                    CheckFormOnErrors();
+                    NumberOfTeethlabel.Text = _numberOfTeeth.MinValue + " - " + _numberOfTeeth.MaxValue + " мм";    
+                    if (!Validator.Validate(_numberOfTeeth))
+                    {
+                        NumberOfTeethTextBox.BackColor = _errorColor;
+                        _toolTip.SetToolTip(NumberOfTeethTextBox, "Неподходящее количество зубьев для выбранной ширины рабочей поверхности.");
+                        _dictionaryErrors[nameof(NumberOfTeethTextBox)] = false;
+                        CheckFormOnErrors();
+                    }
+                    else
+                    {
+                        WorkingSurfaceWidthTextBox.BackColor = _correctСolor;
+                        _dictionaryErrors[nameof(WorkingSurfaceWidthTextBox)] = true;
+
+                        NumberOfTeethTextBox.BackColor = _correctСolor;
+                        _toolTip.SetToolTip(NumberOfTeethTextBox, "");
+                        _dictionaryErrors[nameof(NumberOfTeethTextBox)] = true;
+                        CheckFormOnErrors();
+                    }
                 }
             }
         }
 
-        private void NumberOfTeethComboBox_TextChanged(object sender, EventArgs e)
+        private void NumberOfTeethTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (NumberOfTeethComboBox.Text != "")
+            if (NumberOfTeethTextBox.Text != "")
             {
-                NumberOfTeethComboBox.BackColor = _correctСolor;
-                _toolTip.SetToolTip(NumberOfTeethComboBox, "");
-                _dictionaryErrors[nameof(NumberOfTeethComboBox)] = true;
-                _numberOfTeeth.Value = System.Convert.ToSingle(NumberOfTeethComboBox.Text);
+                _numberOfTeeth.MinValue = 2;
+                _numberOfTeeth.MaxValue = 51;
+                NumberOfTeethTextBox.BackColor = _correctСolor;
+                _toolTip.SetToolTip(NumberOfTeethTextBox, "");
+                _dictionaryErrors[nameof(NumberOfTeethTextBox)] = true;
+                _numberOfTeeth.Value = System.Convert.ToSingle(NumberOfTeethTextBox.Text);
                 MakeWorkingSurfaceSpread();
-                if (!Validator.Validate(_workingSurfaceWidth))
+                if (!Validator.Validate(_numberOfTeeth))
                 {
-                    WorkingSurfaceWidthComboBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "Неподходящая ширина рабочей поверхности для выбранного количества зубьев");
-                    _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = false;
+                    NumberOfTeethTextBox.BackColor = _errorColor;
+                    _toolTip.SetToolTip(NumberOfTeethTextBox, "Неподходящее количество зубьев для выбранной ширины рабочей поверхности.");
+                    _dictionaryErrors[nameof(NumberOfTeethTextBox)] = false;
                     CheckFormOnErrors();
                 }
                 else
                 {
-                    WorkingSurfaceWidthComboBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(WorkingSurfaceWidthComboBox, "");
-                    _dictionaryErrors[nameof(WorkingSurfaceWidthComboBox)] = true;
-                    CheckFormOnErrors();
+                    WorkingSurfacewidthLabel.Text = _workingSurfaceWidth.MinValue + " - " + _workingSurfaceWidth.MaxValue + " мм";
+                    if (!Validator.Validate(_workingSurfaceWidth))
+                    {
+                        WorkingSurfaceWidthTextBox.BackColor = _errorColor;
+                        _toolTip.SetToolTip(WorkingSurfaceWidthTextBox, "Неподходящая ширина рабочей поверхности для выбранного количества зубьев");
+                        _dictionaryErrors[nameof(WorkingSurfaceWidthTextBox)] = false;
+                        CheckFormOnErrors();
+                    }
+                    else
+                    {
+                        NumberOfTeethTextBox.BackColor = _correctСolor;
+                        _dictionaryErrors[nameof(NumberOfTeethTextBox)] = true;
+
+                        WorkingSurfaceWidthTextBox.BackColor = _correctСolor;
+                        _toolTip.SetToolTip(WorkingSurfaceWidthTextBox, "");
+                        _dictionaryErrors[nameof(WorkingSurfaceWidthTextBox)] = true;
+                        CheckFormOnErrors();
+                    }
                 }
             }
         }
@@ -423,6 +564,16 @@
                     CheckFormOnErrors();
                 }
             }
+        }
+
+        private void WorkingSurfaceWidthTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            KeyPress(e);
+        }
+
+        private void NumberOfTeethTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            KeyPress(e);
         }
     }
 }

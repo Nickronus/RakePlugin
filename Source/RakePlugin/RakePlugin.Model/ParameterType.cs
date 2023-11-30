@@ -43,22 +43,8 @@
         /// <summary>
         /// Облегченная рабочая поверхность
         /// </summary>
-        LightweightWorkSurface
-    }
-
-    /// <summary>
-    /// Тип зубца.
-    /// </summary>
-    public enum ToothShareType
-    {
-        /// <summary>
-        /// Квадрат.
-        /// </summary>
-        square = 0,
-
-        /// <summary>
-        /// Круг.
-        /// </summary>
-        circle = 1
+        LightweightWorkSurface,
+        
+        DistanceBetweenTeeth
     }
 }

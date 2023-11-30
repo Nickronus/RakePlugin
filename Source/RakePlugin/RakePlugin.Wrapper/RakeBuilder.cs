@@ -8,51 +8,56 @@
     public class RakeBuilder
     {
         /// <summary>
-        /// Класс взаимодействия с API Компаса.
-        /// </summary>
-        public Kompas3DWrapper kompas3DWrapper = new Kompas3DWrapper();
-
-        /// <summary>
         /// Метод создания грабель.
         /// </summary>
         /// <param name="rakeParameters">Параметры грабель.</param>
-        public void BuildRake(RakeParameters rakeParameters)
+        public void BuildRake(RakeParameters rakeParameters, I3DWrapper wrapper, bool isSAPRopened)
         {
-            try
+            if (isSAPRopened == true)
             {
-                kompas3DWrapper.CreateDocument3D();
-                CreateRake(rakeParameters);
+                try
+                {
+                    wrapper.CreateDocument3D();
+                    CreateRake(rakeParameters, wrapper);
 
+                }
+                catch
+                {
+                    wrapper.OpenSAPR();
+                    wrapper.CreateDocument3D();
+                    CreateRake(rakeParameters, wrapper);
+                }
             }
-            catch
+            else
             {
-                kompas3DWrapper.OpenKompas();
-                kompas3DWrapper.CreateDocument3D();
-                CreateRake(rakeParameters);
-            }
+                wrapper.OpenSAPR();
+                wrapper.CreateDocument3D();
+                CreateRake(rakeParameters, wrapper);
+            }  
         }
 
         /// <summary>
         /// Вспомогательный метод создания грабель.
         /// </summary>
         /// <param name="rakeParameters">Параметры грабель.</param>
-        private void CreateRake(RakeParameters rakeParameters)
+        private void CreateRake(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
-            kompas3DWrapper.CreateWorkingSurface(
+            wrapper.CreateWorkingSurface(
                 rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
                     rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
-            kompas3DWrapper.CreateHandle(
+            wrapper.CreateHandle(
                 rakeParameters.Parameters[ParameterType.HandleDiameter].Value,
                 rakeParameters.Parameters[ParameterType.HandleLength].Value);
-            kompas3DWrapper.CreateTeeth(
+            wrapper.CreateTeeth(
                 rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
                 rakeParameters.Parameters[ParameterType.LengthOfTeeth].Value,
                 rakeParameters.Parameters[ParameterType.NumberOfTeeth].Value,
                 rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value,
-                rakeParameters.Parameters[ParameterType.ToothShape].Value);
+                rakeParameters.Parameters[ParameterType.ToothShape].Value,
+                rakeParameters.Parameters[ParameterType.DistanceBetweenTeeth].Value);
             if (rakeParameters.Parameters[ParameterType.LightweightWorkSurface].Value == 1)
             {
-                kompas3DWrapper.CreateHole(
+                wrapper.CreateHole(
                     rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
                     rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
             }

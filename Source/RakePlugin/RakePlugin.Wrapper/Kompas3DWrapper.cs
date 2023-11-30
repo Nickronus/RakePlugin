@@ -7,7 +7,7 @@
     /// <summary>
     /// Класс взаимодействия с API Компаса.
     /// </summary>
-    public class Kompas3DWrapper
+    public class Kompas3DWrapper : I3DWrapper
     {
         /// <summary>
         /// Объект.
@@ -65,9 +65,9 @@
         private ksRectangleParam WorkingSurfaceParam { get; set; }
 
         /// <summary>
-        /// Метод запуска Компаса.
+        /// Метод запуска САПР.
         /// </summary>
-        public void OpenKompas()
+        public void OpenSAPR()
         {
             Type type = Type.GetTypeFromProgID("KOMPAS.Application.5");
             KompasObject = (KompasObject)Activator.CreateInstance(type);
@@ -173,9 +173,8 @@
         /// <param name="numberOfTeeth">Количество зубцов.</param>
         /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
         /// <param name="toothShape">Вид зубца.</param>
-        public void CreateTeeth(float workingSurfaceWidth, float lengthOfTeeth, float numberOfTeeth, float workingSurfaceLength, float toothShape)
+        public void CreateTeeth(float workingSurfaceWidth, float lengthOfTeeth, float numberOfTeeth, float workingSurfaceLength, float toothShape, float distanceBetweenTeeth)
         {
-            float distanceBetweenTeeth = (((workingSurfaceWidth / 10) - numberOfTeeth) / (numberOfTeeth - 1) * 10) + 10;
             for (int i = 0; i < numberOfTeeth; i++)
             {
                 CreatePart();

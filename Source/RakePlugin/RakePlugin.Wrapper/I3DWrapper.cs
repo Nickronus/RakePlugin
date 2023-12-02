@@ -53,5 +53,26 @@
         /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
         /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
         void CreateHole(float workingSurfaceWidth, float workingSurfaceLength);
+
+        void CreateRectangleSketch(
+            float width,
+            float height,
+            float xCenter,
+            float yCenter,
+            Plane plane);
+
+        void CreateCircleSketch(
+            float radius,
+            float xCenter,
+            float yCenter,
+            Plane plane);
+
+        void ExtructionSketch(
+            float value,
+            bool normal);
+
+        void CutExtructionSketch(
+            float value,
+            bool normal);
 }
 }

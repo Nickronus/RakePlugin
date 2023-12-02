@@ -116,5 +116,38 @@
         {
 
         }
+
+        public void CreateRectangleSketch(
+    float width,
+    float height,
+    float xCenter,
+    float yCenter,
+    Plane plane)
+        {
+
+        }
+
+        public void CreateCircleSketch(
+            float radius,
+            float xCenter,
+            float yCenter,
+            Plane plane)
+        {
+
+        }
+
+        public void ExtructionSketch(
+            float value,
+            bool normal)
+        {
+
+        }
+
+        public void CutExtructionSketch(
+            float value,
+            bool normal)
+        {
+
+        }
     }
 }

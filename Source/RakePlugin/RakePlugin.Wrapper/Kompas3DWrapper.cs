@@ -236,7 +236,7 @@
         /// </summary>
         /// <param name="normal">Нормальное направление.</param>
         /// <param name="value">Значение.</param>
-        public void Cut(bool normal, int value)
+        public void Cut(bool normal, float value)
         {
             EntityExtr = (ksEntity)Part.NewEntity((short)Obj3dType.o3d_cutExtrusion);
             CutDef = (ksCutExtrusionDefinition)EntityExtr.GetDefinition();
@@ -285,6 +285,85 @@
             }
 
             EntityExtr.Create();
+        }
+
+        public void InitializationSketchDefinition(Plane plane)
+        {
+            Sketch = Part.NewEntity((short)Obj3dType.o3d_sketch);
+            DefinitionSketch = Sketch.GetDefinition();
+            if (plane == Plane.XOY)
+            {
+                DefinitionSketch.SetPlane(Part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY));
+            }
+
+            if (plane == Plane.XOZ)
+            {
+                DefinitionSketch.SetPlane(Part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ));
+            }
+
+            if (plane == Plane.ZOY)
+            {
+                DefinitionSketch.SetPlane(Part.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ));
+            }
+
+            Sketch.Create();
+        }
+
+        public void CreateRectangleSketch(
+            float width,
+            float height,
+            float xCenter,
+            float yCenter,
+            Plane plane)
+        {
+            CreatePart();
+            InitializationSketchDefinition(plane);
+
+            Document2D = DefinitionSketch.BeginEdit();
+            Document2D.ksLineSeg(xCenter + (width / 2), yCenter + (height / 2), xCenter + (width / 2), yCenter - (height / 2), 1);
+            Document2D.ksLineSeg(xCenter + (width / 2), yCenter + (height / 2), xCenter - (width / 2), yCenter + (height / 2), 1);
+            Document2D.ksLineSeg(xCenter - (width / 2), yCenter - (height / 2), xCenter - (width / 2), yCenter + (height / 2), 1);
+            Document2D.ksLineSeg(xCenter - (width / 2), yCenter - (height / 2), xCenter + (width / 2), yCenter - (height / 2), 1);
+
+            Document2D.ksLineSeg(xCenter + (width / 2), yCenter + (height / 2), xCenter - (width / 2), yCenter - (height / 2), 2);
+            Document2D.ksLineSeg(xCenter + (width / 2), yCenter - (height / 2), xCenter - (width / 2), yCenter + (height / 2), 2);
+
+            Document2D.ksPoint(0, 0, 0);
+            DefinitionSketch.EndEdit();
+            DefinitionSketch.angle = 180;
+            Sketch.Update();
+        }
+
+        public void CreateCircleSketch(
+            float radius,
+            float xCenter,
+            float yCenter,
+            Plane plane)
+        {
+            CreatePart();
+            InitializationSketchDefinition(plane);
+
+            Document2D = DefinitionSketch.BeginEdit();
+            Document2D.ksCircle(xCenter, yCenter, radius, 1);
+            DefinitionSketch.angle = 180;
+            DefinitionSketch.EndEdit();
+            Sketch.Update();
+        }
+
+        public void ExtructionSketch(
+            float value,
+            bool normal)
+        {
+            CreatePart();
+            CreateExtrusionParam(value, normal);
+        }
+
+        public void CutExtructionSketch(
+            float value,
+            bool normal)
+        {
+            CreatePart();
+            Cut(normal, value);
         }
     }
 }

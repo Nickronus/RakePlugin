@@ -45,6 +45,9 @@
         /// </summary>
         LightweightWorkSurface,
         
+        /// <summary>
+        /// Расстояние между зубцами.
+        /// </summary>
         DistanceBetweenTeeth
     }
 }

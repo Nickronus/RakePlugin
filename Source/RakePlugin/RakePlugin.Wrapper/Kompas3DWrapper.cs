@@ -93,145 +93,6 @@
         }
 
         /// <summary>
-        /// Метод создания Эскиза по плоскости XOY.
-        /// </summary>
-        public void InitializationSketchDefinitionXOY()
-        {
-            Sketch = Part.NewEntity((short)Obj3dType.o3d_sketch);
-            DefinitionSketch = Sketch.GetDefinition();
-            DefinitionSketch.SetPlane(Part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY));
-            Sketch.Create();
-        }
-
-        /// <summary>
-        /// Метод создания эскиза по плосксти XOZ.
-        /// </summary>
-        public void InitializationSketchDefinitionXOZ()
-        {
-            Sketch = Part.NewEntity((short)Obj3dType.o3d_sketch);
-            DefinitionSketch = Sketch.GetDefinition();
-            DefinitionSketch.SetPlane(Part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ));
-            Sketch.Create();
-        }
-
-        /// <summary>
-        /// Создание 2D документа по одному параметру прямоугольника.
-        /// </summary>
-        /// <param name="ksRectangleParam">Параметрт прямоугольника.</param>
-        public void CreateDocument2DForOneRectangleParam(ksRectangleParam ksRectangleParam)
-        {
-            Document2D = DefinitionSketch.BeginEdit();
-            Document2D.ksRectangle(ksRectangleParam, 0);
-            DefinitionSketch.EndEdit();
-        }
-
-        /// <summary>
-        /// Метод создания рабочей поверхности.
-        /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        public void CreateWorkingSurface(float workingSurfaceWidth, float workingSurfaceLength)
-        {
-            CreatePart();
-            InitializationSketchDefinitionXOY();
-            Document2D = DefinitionSketch.BeginEdit();
-            Document2D.ksLineSeg((-workingSurfaceWidth) / 2, -15, workingSurfaceWidth / 2, -15, 1);
-            Document2D.ksLineSeg(workingSurfaceWidth / 2, -15, workingSurfaceWidth / 2, 15, 1);
-            Document2D.ksLineSeg(workingSurfaceWidth / 2, 15, (-workingSurfaceWidth) / 2, 15, 1);
-            Document2D.ksLineSeg((-workingSurfaceWidth) / 2, 15, (-workingSurfaceWidth) / 2, -15, 1);
-            Document2D.ksLineSeg(workingSurfaceWidth / 2, -15, (-workingSurfaceWidth) / 2, 15, 2);
-            Document2D.ksLineSeg((-workingSurfaceWidth) / 2, -15, workingSurfaceWidth / 2, 15, 2);
-            Document2D.ksPoint(0, 0, 0);
-            DefinitionSketch.EndEdit();
-            DefinitionSketch.angle = 180;
-            Sketch.Update();
-            CreatePart();
-            CreateExtrusionParam(workingSurfaceLength, true);
-        }
-
-        /// <summary>
-        /// Метод создания ручки.
-        /// </summary>
-        /// <param name="handleDiameter">Диаметр ручки.</param>
-        /// <param name="handleLength">Длина ручки.</param>
-        public void CreateHandle(float handleDiameter, float handleLength)
-        {
-            InitializationSketchDefinitionXOY();
-            Document2D = DefinitionSketch.BeginEdit();
-            Document2D.ksCircle(0, 0, handleDiameter / 2, 1);
-            DefinitionSketch.angle = 180;
-            DefinitionSketch.EndEdit();
-            Sketch.Update();
-            CreateExtrusionParam(handleLength, false);
-        }
-
-        /// <summary>
-        /// Метод создания зубца.
-        /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="lengthOfTeeth">Длина зубца.</param>
-        /// <param name="numberOfTeeth">Количество зубцов.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        /// <param name="toothShape">Вид зубца.</param>
-        public void CreateTeeth(float workingSurfaceWidth, float lengthOfTeeth, float numberOfTeeth, float workingSurfaceLength, float toothShape, float distanceBetweenTeeth)
-        {
-            for (int i = 0; i < numberOfTeeth; i++)
-            {
-                CreatePart();
-                InitializationSketchDefinitionXOZ();
-                Document2D = DefinitionSketch.BeginEdit();
-
-                if (toothShape == 0)
-                {
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength - 10, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength - 10, 1);
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength - 10, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength, 1);
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength, 1);
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength - 10, 1);
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength - 10, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength, 2);
-                    Document2D.ksLineSeg((workingSurfaceWidth / 2) - (i * distanceBetweenTeeth) - 10, workingSurfaceLength - 10, (workingSurfaceWidth / 2) - (i * distanceBetweenTeeth), workingSurfaceLength, 2);
-                }
-
-                if (toothShape == 1)
-                {
-                    Document2D.ksCircle((workingSurfaceWidth / 2) - 5 - (i * distanceBetweenTeeth), workingSurfaceLength - 5, 5, 1);
-                }
-
-                Document2D.ksPoint(0, 0, 0);
-                DefinitionSketch.EndEdit();
-                DefinitionSketch.angle = 180;
-                Sketch.Update();
-                CreatePart();
-                CreateExtrusionParam(lengthOfTeeth + 15, true);
-            }
-        }
-
-        /// <summary>
-        /// Метод создания дырки.
-        /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        public void CreateHole(float workingSurfaceWidth, float workingSurfaceLength)
-        {
-            CreatePart();
-            InitializationSketchDefinitionXOZ();
-            Document2D = DefinitionSketch.BeginEdit();
-            Document2D.ksLineSeg((-workingSurfaceWidth / 2) + 10, 10, (workingSurfaceWidth / 2) - 10, 10, 1);
-            Document2D.ksLineSeg((workingSurfaceWidth / 2) - 10, 10, (workingSurfaceWidth / 2) - 10, workingSurfaceLength - 10, 1);
-            Document2D.ksLineSeg((workingSurfaceWidth / 2) - 10, workingSurfaceLength - 10, (-workingSurfaceWidth / 2) + 10, workingSurfaceLength - 10, 1);
-            Document2D.ksLineSeg((-workingSurfaceWidth / 2) + 10, workingSurfaceLength - 10, (-workingSurfaceWidth / 2) + 10, 10, 1);
-            Document2D.ksLineSeg((workingSurfaceWidth / 2) - 10, 10, (-workingSurfaceWidth / 2) + 10, workingSurfaceLength - 10, 2);
-            Document2D.ksLineSeg((-workingSurfaceWidth / 2) + 10, 10, (workingSurfaceWidth / 2) - 10, workingSurfaceLength - 10, 2);
-            Document2D.ksPoint(0, 0, 0);
-            DefinitionSketch.EndEdit();
-            DefinitionSketch.angle = 180;
-            Sketch.Update();
-            CreatePart();
-
-            Cut(true, 15);
-            Cut(false, 15);
-        }
-
-        /// <summary>
         /// Метод вырезания выдавливанием.
         /// </summary>
         /// <param name="normal">Нормальное направление.</param>
@@ -287,6 +148,10 @@
             EntityExtr.Create();
         }
 
+        /// <summary>
+        /// Создание описания плоскости эскиза.
+        /// </summary>
+        /// <param name="plane">Плоскость.</param>
         public void InitializationSketchDefinition(Plane plane)
         {
             Sketch = Part.NewEntity((short)Obj3dType.o3d_sketch);
@@ -309,6 +174,14 @@
             Sketch.Create();
         }
 
+        /// <summary>
+        /// Создание прямоугольного эскиза.
+        /// </summary>
+        /// <param name="width">Ширина.</param>
+        /// <param name="height">Длина.</param>
+        /// <param name="xCenter">Центр х.</param>
+        /// <param name="yCenter">Центр у.</param>
+        /// <param name="plane">Плоскость.</param>
         public void CreateRectangleSketch(
             float width,
             float height,
@@ -334,6 +207,13 @@
             Sketch.Update();
         }
 
+        /// <summary>
+        /// Создание кругового эскиза.
+        /// </summary>
+        /// <param name="radius">Радиус.</param>
+        /// <param name="xCenter">Центр х.</param>
+        /// <param name="yCenter">Центр у.</param>
+        /// <param name="plane">Плоскость.</param>
         public void CreateCircleSketch(
             float radius,
             float xCenter,
@@ -350,6 +230,11 @@
             Sketch.Update();
         }
 
+        /// <summary>
+        /// Выдавливание эскиза.
+        /// </summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="normal">По нормали.</param>
         public void ExtructionSketch(
             float value,
             bool normal)
@@ -358,6 +243,11 @@
             CreateExtrusionParam(value, normal);
         }
 
+        /// <summary>
+        /// Вырезание выдавливанием.
+        /// </summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="normal">По нормали.</param>
         public void CutExtructionSketch(
             float value,
             bool normal)

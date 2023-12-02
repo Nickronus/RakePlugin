@@ -17,43 +17,13 @@
         void CreateDocument3D();
 
         /// <summary>
-        /// Создание рабочей поверхности.
+        /// Создание прямоугольного эскиза.
         /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        void CreateWorkingSurface(float workingSurfaceWidth, float workingSurfaceLength);
-
-        /// <summary>
-        /// Создание ручки.
-        /// </summary>
-        /// <param name="handleDiameter">Диаметр ручки.</param>
-        /// <param name="handleLength">Длина ручки.</param>
-        void CreateHandle(float handleDiameter, float handleLength);
-
-        /// <summary>
-        /// Создание зубца.
-        /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="lengthOfTeeth">Длина зубца.</param>
-        /// <param name="numberOfTeeth">Количество зубцов.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        /// <param name="toothShape">Вид зубца.</param>
-        /// <param name="distanceBetweenTeeth">Расстояние между зубцами.</param>
-        void CreateTeeth(
-                float workingSurfaceWidth,
-                float lengthOfTeeth,
-                float numberOfTeeth,
-                float workingSurfaceLength,
-                float toothShape,
-                float distanceBetweenTeeth);
-
-        /// <summary>
-        /// Создание дырки.
-        /// </summary>
-        /// <param name="workingSurfaceWidth">Ширина рабочей поверхности.</param>
-        /// <param name="workingSurfaceLength">Длина рабочей поверхности.</param>
-        void CreateHole(float workingSurfaceWidth, float workingSurfaceLength);
-
+        /// <param name="width">Ширина.</param>
+        /// <param name="height">Длина.</param>
+        /// <param name="xCenter">Центр х.</param>
+        /// <param name="yCenter">Центр у.</param>
+        /// <param name="plane">Плоскость.</param>
         void CreateRectangleSketch(
             float width,
             float height,
@@ -61,16 +31,33 @@
             float yCenter,
             Plane plane);
 
+        /// <summary>
+        /// Создание кругового эскиза.
+        /// </summary>
+        /// <param name="radius">Радиус.</param>
+        /// <param name="xCenter">Центр х.</param>
+        /// <param name="yCenter">Центр у.</param>
+        /// <param name="plane">Плоскость.</param>
         void CreateCircleSketch(
             float radius,
             float xCenter,
             float yCenter,
             Plane plane);
 
+        /// <summary>
+        /// Выдавливание эскиза.
+        /// </summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="normal">По нормали.</param>
         void ExtructionSketch(
             float value,
             bool normal);
 
+        /// <summary>
+        /// Вырезание выдавливанием.
+        /// </summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="normal">По нормали.</param>
         void CutExtructionSketch(
             float value,
             bool normal);

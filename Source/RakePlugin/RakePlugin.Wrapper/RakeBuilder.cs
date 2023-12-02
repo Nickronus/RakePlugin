@@ -42,29 +42,6 @@
         /// <param name="rakeParameters">Параметры грабель.</param>
         private void CreateRake(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
-            /*
-            wrapper.CreateWorkingSurface(
-                rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
-                    rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
-            wrapper.CreateHandle(
-                rakeParameters.Parameters[ParameterType.HandleDiameter].Value,
-                rakeParameters.Parameters[ParameterType.HandleLength].Value);
-            wrapper.CreateTeeth(
-                rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
-                rakeParameters.Parameters[ParameterType.LengthOfTeeth].Value,
-                rakeParameters.Parameters[ParameterType.NumberOfTeeth].Value,
-                rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value,
-                rakeParameters.Parameters[ParameterType.ToothShape].Value,
-                rakeParameters.Parameters[ParameterType.DistanceBetweenTeeth].Value);
-            if (rakeParameters.Parameters[ParameterType.LightweightWorkSurface].Value == 1)
-            {
-                wrapper.CreateHole(
-                    rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value,
-                    rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value);
-            }
-            */
-            //_________________
-
             MakeWorkingSurface(rakeParameters, wrapper);
             MakeHandle(rakeParameters, wrapper);
             MakeTeeth(rakeParameters, wrapper);
@@ -74,6 +51,11 @@
             }
         }
 
+        /// <summary>
+        /// Создание рабочей поверхности.
+        /// </summary>
+        /// <param name="rakeParameters">Параметры грабель.</param>
+        /// <param name="wrapper">Оболочка.</param>
         private void MakeWorkingSurface(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
             wrapper.CreateRectangleSketch(
@@ -87,6 +69,11 @@
                 true);
         }
 
+        /// <summary>
+        /// Создание ручки.
+        /// </summary>
+        /// <param name="rakeParameters">Параметры грабель.</param>
+        /// <param name="wrapper">Оболочка.</param>
         private void MakeHandle(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
             wrapper.CreateCircleSketch(
@@ -99,6 +86,11 @@
                 false);
         }
 
+        /// <summary>
+        /// Создание зубцов.
+        /// </summary>
+        /// <param name="rakeParameters">Параметры грабель.</param>
+        /// <param name="wrapper">Оболочка.</param>
         private void MakeTeeth(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
             for (int i = 0; i < rakeParameters.Parameters[ParameterType.NumberOfTeeth].Value; ++i)
@@ -131,6 +123,11 @@
             }
         }
 
+        /// <summary>
+        /// Создание дырки.
+        /// </summary>
+        /// <param name="rakeParameters">Параметры.</param>
+        /// <param name="wrapper">Оболочник.</param>
         private void MakeHole(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
             wrapper.CreateRectangleSketch(

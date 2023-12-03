@@ -3,15 +3,18 @@
     using SolidWorks.Interop.sldworks;
     using SolidWorks.Interop.swconst;
 
+    /// <summary>
+    /// Класс оболочка методов Солид-Воркс.
+    /// </summary>
     public class SolidWorksWrapper : I3DWrapper
     {
         /// <summary>
-        /// Объект SW api
+        /// Объект SW api.
         /// </summary>
         public SldWorks SolidWorks { get; private set; } = new SldWorks();
 
         /// <summary>
-        /// Объект для работы с созданными документами
+        /// Объект для работы с созданными документами.
         /// </summary>
         public ModelDoc2 ModelDocument { get; private set; }
 
@@ -134,16 +137,6 @@
             ModelDocument.ClearSelection2(true);
         }
 
-        private bool ReversNormalValue(bool normal)
-        {
-            if (normal)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Выдавливание эскиза.
         /// </summary>
@@ -156,11 +149,8 @@
             // Доступ к элементу feature manager к активному эскизу.
             Feature currentFeature = ModelDocument.SketchManager.ActiveSketch as Feature;
             var sketchName = currentFeature.Name;
-            
 
             var extrusionDepthInMeters = value / 1000;
-
-            
 
             ModelDocument.Extension.SelectByID2(
                 sketchName,
@@ -172,7 +162,7 @@
                 0,
                 null,
                 0);
-            
+
             var feature = ModelDocument.FeatureManager.FeatureExtrusion2(
                 true,
                 false,
@@ -197,8 +187,8 @@
                 0,
                 0,
                 false);
-           
-            feature.Name = "Extruct"; 
+
+            feature.Name = "Extruct";
         }
 
         /// <summary>
@@ -213,7 +203,7 @@
             // Доступ к элементу feature manager к активному эскизу.
             Feature currentFeature = ModelDocument.SketchManager.ActiveSketch as Feature;
             var sketchName = currentFeature.Name;
-            
+
             var valueInMeters = value / 1000;
 
             ModelDocument.Extension.SelectByID2(
@@ -246,8 +236,23 @@
                 0,
                 0,
                 false);
-           
-            feature.Name = "Cut"; 
+
+            feature.Name = "Cut";
+        }
+
+        /// <summary>
+        /// Изменяет значение нормали на противоположное.
+        /// </summary>
+        /// <param name="normal">Нормаль.</param>
+        /// <returns>Обратную нормаль.</returns>
+        private bool ReversNormalValue(bool normal)
+        {
+            if (normal)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

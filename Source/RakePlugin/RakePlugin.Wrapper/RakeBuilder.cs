@@ -14,7 +14,6 @@
         /// <param name="rakeParameters">Параметры грабель.</param>
         public void BuildRake(RakeParameters rakeParameters, I3DWrapper wrapper, string nameCAD)
         {
-
             if (Process.GetProcessesByName(nameCAD).Length > 0 && !string.IsNullOrEmpty(Process.GetProcessesByName(nameCAD)[0].MainWindowTitle))
             {
                 try
@@ -35,7 +34,7 @@
                 wrapper.OpenSAPR();
                 wrapper.CreateDocument3D();
                 CreateRake(rakeParameters, wrapper);
-            }  
+            }
         }
 
         /// <summary>
@@ -49,7 +48,7 @@
             MakeTeeth(rakeParameters, wrapper);
             if (rakeParameters.Parameters[ParameterType.LightweightWorkSurface].Value == 1)
             {
-                MakeHole(rakeParameters,wrapper);
+                MakeHole(rakeParameters, wrapper);
             }
         }
 
@@ -102,8 +101,6 @@
 
                 if (rakeParameters.Parameters[ParameterType.ToothShape].Value == 0)
                 {
-                    
-
                     wrapper.CreateRectangleSketch(
                         10,
                         10,

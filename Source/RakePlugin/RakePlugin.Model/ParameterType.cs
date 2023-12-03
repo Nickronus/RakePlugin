@@ -44,7 +44,7 @@
         /// Облегченная рабочая поверхность
         /// </summary>
         LightweightWorkSurface,
-        
+
         /// <summary>
         /// Расстояние между зубцами.
         /// </summary>

@@ -1,6 +1,5 @@
 ﻿namespace RakePlugin.Wrapper
 {
-
     /// <summary>
     /// Интерфейс построителя.
     /// </summary>

@@ -138,6 +138,14 @@
         };
 
         /// <summary>
+        /// Инициализация главного окна.
+        /// </summary>
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
         /// Экзкмпляр Kompas3DWrapper.
         /// </summary>
         private Kompas3DWrapper _Kompas3DWrapper { get; set; } = new Kompas3DWrapper();
@@ -150,15 +158,7 @@
         /// <summary>
         /// Всплывающее окно.
         /// </summary>
-        private readonly ToolTip _toolTip = new ToolTip();
-
-        /// <summary>
-        /// Инициализация главного окна.
-        /// </summary>
-        public MainForm()
-        {
-            InitializeComponent();
-        }
+        private ToolTip _toolTip { get; set; } = new ToolTip();
 
         /// <summary>
         /// Проверка формы на ошибки.
@@ -249,7 +249,7 @@
         }
 
         /// <summary>
-        /// Создать разброс ширины рабочей поверхности
+        /// Создать разброс ширины рабочей поверхности.
         /// </summary>
         private void MakeWorkingSurfaceSpread()
         {
@@ -285,7 +285,7 @@
                 }
                 else
                 {
-                    NumberOfTeethlabel.Text = _numberOfTeeth.MinValue + " - " + _numberOfTeeth.MaxValue + " мм";    
+                    NumberOfTeethlabel.Text = _numberOfTeeth.MinValue + " - " + _numberOfTeeth.MaxValue + " мм";
                     if (!Validator.Validate(_numberOfTeeth))
                     {
                         NumberOfTeethTextBox.BackColor = _errorColor;

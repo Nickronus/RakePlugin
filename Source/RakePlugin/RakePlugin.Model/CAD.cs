@@ -18,7 +18,7 @@
         /// Метод возврата процесса Солида.
         /// </summary>
         /// <returns>Процесс.</returns>
-        public static string SolidWorks() 
+        public static string SolidWorks()
         {
             return "SLDWORKS";
         }

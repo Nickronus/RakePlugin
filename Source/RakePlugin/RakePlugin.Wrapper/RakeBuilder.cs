@@ -137,6 +137,12 @@
                 rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value / 2,
                 Plane.XOZ);
             wrapper.CutExtructionSketch(15, true);
+            wrapper.CreateRectangleSketch(
+                rakeParameters.Parameters[ParameterType.WorkingSurfaceWidth].Value - 20,
+                rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value - 20,
+                0,
+                rakeParameters.Parameters[ParameterType.WorkingSurfaceLength].Value / 2,
+                Plane.XOZ);
             wrapper.CutExtructionSketch(15, false);
         }
     }

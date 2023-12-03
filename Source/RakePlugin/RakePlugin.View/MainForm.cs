@@ -47,6 +47,9 @@
         /// </summary>
         private readonly RakeBuilder _builder = new RakeBuilder();
 
+        /// <summary>
+        /// Расстояне между зубцами.
+        /// </summary>
         private readonly Parameter _distanceBetweenTeeth = new Parameter
         {
             MaxValue = 100,
@@ -135,22 +138,6 @@
         };
 
         /// <summary>
-        /// Счётчик запуска построений в Компасе.
-        /// </summary>
-        private readonly Parameter _KompasOpenedCounter = new Parameter
-        {
-            Value = 0
-        };
-
-        /// <summary>
-        /// Счётчик запуска построений в Solidworks.
-        /// </summary>
-        private readonly Parameter _SolidWorksOpenedCounter = new Parameter
-        {
-            Value = 0
-        };
-
-        /// <summary>
         /// Экзкмпляр Kompas3DWrapper.
         /// </summary>
         private Kompas3DWrapper _Kompas3DWrapper { get; set; } = new Kompas3DWrapper();
@@ -210,52 +197,22 @@
         }
 
         /// <summary>
-        /// Проверка открытости САПР.
+        /// Метод, определяющий САПР.
         /// </summary>
-        /// <returns>Возвращает правду о сапре.</returns>
-        private bool IsSaprOpened()
+        /// <returns>САПР.</returns>
+        private string WhatCAD()
         {
             if (saprComboBox.Text == "Компас 3D")
             {
-                if (_KompasOpenedCounter.Value == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return CAD.Kompas();
             }
 
             if (saprComboBox.Text == "SolidWorks")
             {
-                if (_SolidWorksOpenedCounter.Value == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return CAD.SolidWorks();
             }
 
-            return false;
-        }
-
-        /// <summary>
-        /// Делает значение открытости сапры валидными.
-        /// </summary>
-        private void SaprOpenedCounterValidator()
-        {
-            if (saprComboBox.Text == "Компас 3D")
-            {
-                _KompasOpenedCounter.Value++;
-            }
-
-            if (saprComboBox.Text == "SolidWorks")
-            {
-                _SolidWorksOpenedCounter.Value++;
-            }
+            return "";
         }
 
         /// <summary>
@@ -279,8 +236,7 @@
                 { ParameterType.DistanceBetweenTeeth, _distanceBetweenTeeth}
             };
 
-            _builder.BuildRake(_parameters, WrapperFactory(), IsSaprOpened());
-            SaprOpenedCounterValidator();
+            _builder.BuildRake(_parameters, WrapperFactory(), WhatCAD());
     }
 
         /// <summary>
@@ -301,6 +257,9 @@
             _workingSurfaceWidth.MinValue = (((_numberOfTeeth.Value - 1) * 2) + 1) * 10;
         }
 
+        /// <summary>
+        /// Метод создания расстояния между зубцами.
+        /// </summary>
         private void MakeDistanceBetweenTeeth()
         {
             _distanceBetweenTeeth.Value = (((_workingSurfaceWidth.Value / 10) - _numberOfTeeth.Value) / (_numberOfTeeth.Value - 1) * 10) + 10;

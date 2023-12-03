@@ -1,6 +1,7 @@
 ﻿namespace RakePlugin.Wrapper
 {
     using RakePlugin.Model;
+    using System.Diagnostics;
 
     /// <summary>
     /// Построитель грабель.
@@ -11,9 +12,10 @@
         /// Метод создания грабель.
         /// </summary>
         /// <param name="rakeParameters">Параметры грабель.</param>
-        public void BuildRake(RakeParameters rakeParameters, I3DWrapper wrapper, bool isSAPRopened)
+        public void BuildRake(RakeParameters rakeParameters, I3DWrapper wrapper, string nameCAD)
         {
-            if (isSAPRopened == true)
+
+            if (Process.GetProcessesByName(nameCAD).Length > 0 && !string.IsNullOrEmpty(Process.GetProcessesByName(nameCAD)[0].MainWindowTitle))
             {
                 try
                 {

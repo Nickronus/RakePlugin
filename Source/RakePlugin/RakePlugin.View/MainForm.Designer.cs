@@ -59,9 +59,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.BuildFigure = new System.Windows.Forms.Button();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.ErrorsToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label2 = new System.Windows.Forms.Label();
             this.saprComboBox = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ErrorsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.OptionsPanel.SuspendLayout();
             this.ParameterLimitations.SuspendLayout();
             this.ParameterValues.SuspendLayout();
@@ -271,7 +271,7 @@
             this.HandleDiameterTextBox.Size = new System.Drawing.Size(84, 22);
             this.HandleDiameterTextBox.TabIndex = 5;
             this.HandleDiameterTextBox.Text = "30";
-            this.HandleDiameterTextBox.TextChanged += new System.EventHandler(this.HandleDiametertTextBox_TextChanged);
+            this.HandleDiameterTextBox.TextChanged += new System.EventHandler(this.HandleDiameterTextBox_TextChanged);
             this.HandleDiameterTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HandleDiameterTextBox_KeyPress);
             // 
             // LengthOfTeethTextBox
@@ -408,15 +408,6 @@
             this.MainPanel.Size = new System.Drawing.Size(732, 353);
             this.MainPanel.TabIndex = 1;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 295);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 16);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Выберите САПР";
-            // 
             // saprComboBox
             // 
             this.saprComboBox.FormattingEnabled = true;
@@ -428,6 +419,15 @@
             this.saprComboBox.Size = new System.Drawing.Size(186, 24);
             this.saprComboBox.TabIndex = 5;
             this.saprComboBox.Text = "Компас 3D";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(19, 295);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(112, 16);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Выберите САПР";
             // 
             // MainForm
             // 

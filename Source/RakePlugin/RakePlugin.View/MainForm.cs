@@ -146,14 +146,14 @@
         }
 
         /// <summary>
-        /// Экзкмпляр Kompas3DWrapper.
+        /// Экзкепляр Kompas3DWrapper.
         /// </summary>
-        private Kompas3DWrapper _Kompas3DWrapper { get; set; } = new Kompas3DWrapper();
+        private Kompas3DWrapper _Kompas3DWrapper { get; set; }
 
         /// <summary>
         /// Экземпляр SolidWorksWrapper.
         /// </summary>
-        private SolidWorksWrapper _SolidWorksWrapper { get; set; } = new SolidWorksWrapper();
+        private SolidWorksWrapper _SolidWorksWrapper { get; set; }
 
         /// <summary>
         /// Всплывающее окно.
@@ -185,11 +185,21 @@
         {
             if (saprComboBox.Text == "Компас 3D")
             {
+                if (_Kompas3DWrapper == null)
+                {
+                    _Kompas3DWrapper = new Kompas3DWrapper();
+                }
+
                 return _Kompas3DWrapper;
             }
 
             if (saprComboBox.Text == "SolidWorks")
             {
+                if (_SolidWorksWrapper == null)
+                {
+                    _SolidWorksWrapper = new SolidWorksWrapper();
+                }
+
                 return _SolidWorksWrapper;
             }
 
@@ -204,12 +214,12 @@
         {
             if (saprComboBox.Text == "Компас 3D")
             {
-                return CAD.Kompas();
+                return CAD.Kompas;
             }
 
             if (saprComboBox.Text == "SolidWorks")
             {
-                return CAD.SolidWorks();
+                return CAD.SolidWorks;
             }
 
             return "";
@@ -255,6 +265,16 @@
         {
             _workingSurfaceWidth.MaxValue = (((_numberOfTeeth.Value - 1) * 11) + 1) * 10;
             _workingSurfaceWidth.MinValue = (((_numberOfTeeth.Value - 1) * 2) + 1) * 10;
+
+            if (_workingSurfaceWidth.MaxValue > 1010)
+            {
+                _workingSurfaceWidth.MaxValue = 1010;
+            }
+
+            if (_workingSurfaceWidth.MinValue < 120)
+            {
+                _workingSurfaceWidth.MinValue = 120;
+            }
         }
 
         /// <summary>
@@ -270,6 +290,9 @@
             if (WorkingSurfaceWidthTextBox.Text != "")
             {
                 WorkingSurfaceWidthTextBox.BackColor = _correctСolor;
+                _numberOfTeeth.MinValue = 2;
+                _numberOfTeeth.MaxValue = 51;
+
                 _workingSurfaceWidth.MaxValue = 1010;
                 _workingSurfaceWidth.MinValue = 120;
                 _toolTip.SetToolTip(WorkingSurfaceWidthTextBox, "");
@@ -311,6 +334,9 @@
         {
             if (NumberOfTeethTextBox.Text != "")
             {
+                _workingSurfaceWidth.MaxValue = 1010;
+                _workingSurfaceWidth.MinValue = 120;
+
                 _numberOfTeeth.MinValue = 2;
                 _numberOfTeeth.MaxValue = 51;
                 NumberOfTeethTextBox.BackColor = _correctСolor;
@@ -371,7 +397,7 @@
             }
         }
 
-        private void HandleDiametertTextBox_TextChanged(object sender, EventArgs e)
+        private void HandleDiameterTextBox_TextChanged(object sender, EventArgs e)
         {
             if (HandleDiameterTextBox.Text != "")
             {

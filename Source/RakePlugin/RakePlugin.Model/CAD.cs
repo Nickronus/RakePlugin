@@ -6,21 +6,13 @@
     public static class CAD
     {
         /// <summary>
-        /// Метод вазврата процесса Компаса.
+        /// Процесс компаса.
         /// </summary>
-        /// <returns>Процесс.</returns>
-        public static string Kompas()
-        {
-            return "kStudy";
-        }
+        public const string Kompas = "kStudy";
 
         /// <summary>
-        /// Метод возврата процесса Солида.
+        /// Процесс СолидВоркса.
         /// </summary>
-        /// <returns>Процесс.</returns>
-        public static string SolidWorks()
-        {
-            return "SLDWORKS";
-        }
+        public const string SolidWorks = "SLDWORKS";
     }
 }

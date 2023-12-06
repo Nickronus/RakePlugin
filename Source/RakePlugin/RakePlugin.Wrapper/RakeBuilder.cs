@@ -12,6 +12,8 @@
         /// Метод создания грабель.
         /// </summary>
         /// <param name="rakeParameters">Параметры грабель.</param>
+        /// <param name="wrapper">Оболочка.</param>
+        /// <param name="nameCAD">Название САПР.</param>
         public void BuildRake(RakeParameters rakeParameters, I3DWrapper wrapper, string nameCAD)
         {
             if (Process.GetProcessesByName(nameCAD).Length > 0 && !string.IsNullOrEmpty(Process.GetProcessesByName(nameCAD)[0].MainWindowTitle))
@@ -41,6 +43,7 @@
         /// Вспомогательный метод создания грабель.
         /// </summary>
         /// <param name="rakeParameters">Параметры грабель.</param>
+        /// <param name="wrapper">Оболочка.</param>
         private void CreateRake(RakeParameters rakeParameters, I3DWrapper wrapper)
         {
             MakeWorkingSurface(rakeParameters, wrapper);

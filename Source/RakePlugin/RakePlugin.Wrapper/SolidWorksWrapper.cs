@@ -75,7 +75,16 @@
             float yCenter,
             Plane plane)
         {
-            ModelDocument.Extension.SelectByID2(InitializationSketchDefinition(plane), "PLANE", 0, 0, 0, false, 0, null, 0);
+            ModelDocument.Extension.SelectByID2(
+                InitializationSketchDefinition(plane),
+                "PLANE",
+                0,
+                0,
+                0,
+                false,
+                0,
+                null,
+                0);
             ModelDocument.SketchManager.InsertSketch(true);
             ModelDocument.ClearSelection2(true);
 
@@ -120,7 +129,16 @@
             float yCenter,
             Plane plane)
         {
-            ModelDocument.Extension.SelectByID2(InitializationSketchDefinition(plane), "PLANE", 0, 0, 0, false, 0, null, 0);
+            ModelDocument.Extension.SelectByID2(
+                InitializationSketchDefinition(plane),
+                "PLANE",
+                0,
+                0,
+                0,
+                false,
+                0,
+                null,
+                0);
             ModelDocument.SketchManager.InsertSketch(true);
             ModelDocument.ClearSelection2(true);
 

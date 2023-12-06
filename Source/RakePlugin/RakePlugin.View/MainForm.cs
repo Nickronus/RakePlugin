@@ -13,31 +13,6 @@
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Цвет корректного значения.
-        /// </summary>
-        private readonly Color _correctСolor = Color.White;
-
-        /// <summary>
-        /// Цвет ошибочного значения.
-        /// </summary>
-        private readonly Color _errorColor = Color.LightPink;
-
-        /// <summary>
-        /// Словарь ошибок.
-        /// </summary>
-        private readonly Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
-        {
-            { nameof(WorkingSurfaceWidthTextBox), true },
-            { nameof(NumberOfTeethTextBox), true },
-            { nameof(LengthOfTeethTextBox), true },
-            { nameof(HandleDiameterTextBox), true },
-            { nameof(HandleLengthTextBox), true },
-            { nameof(WorkingSurfaceLengthComboBox), true },
-            { nameof(ToothShapeComboBox), true },
-            { nameof(LightweightWorkSurfaceComboBox), true }
-        };
-
-        /// <summary>
         /// Параметры грабель.
         /// </summary>
         private readonly RakeParameters _parameters = new RakeParameters();
@@ -108,19 +83,19 @@
         };
 
         /// <summary>
-        /// Длина зубца.
+        /// Длина ручки.
         /// </summary>
-        private readonly Parameter _lengthOfTeeth = new Parameter
+        private Parameter _handleLength = new Parameter
         {
-            MaxValue = 200,
-            MinValue = 50,
-            Value = 100
+            MaxValue = 2000,
+            MinValue = 1000,
+            Value = 1000
         };
 
         /// <summary>
         /// Диаметр ручки.
         /// </summary>
-        private readonly Parameter _handleDiameter = new Parameter
+        private Parameter _handleDiameter = new Parameter
         {
             MaxValue = 30,
             MinValue = 20,
@@ -128,13 +103,38 @@
         };
 
         /// <summary>
-        /// Длина ручки.
+        /// Цвет корректного значения.
         /// </summary>
-        private readonly Parameter _handleLength = new Parameter
+        private Color _correctСolor = Color.White;
+
+        /// <summary>
+        /// Цвет ошибочного значения.
+        /// </summary>
+        private Color _errorColor = Color.LightPink;
+
+        /// <summary>
+        /// Словарь ошибок.
+        /// </summary>
+        private Dictionary<string, bool> _dictionaryErrors = new Dictionary<string, bool>()
         {
-            MaxValue = 2000,
-            MinValue = 1000,
-            Value = 1000
+            { nameof(WorkingSurfaceWidthTextBox), true },
+            { nameof(NumberOfTeethTextBox), true },
+            { nameof(LengthOfTeethTextBox), true },
+            { nameof(HandleDiameterTextBox), true },
+            { nameof(HandleLengthTextBox), true },
+            { nameof(WorkingSurfaceLengthComboBox), true },
+            { nameof(ToothShapeComboBox), true },
+            { nameof(LightweightWorkSurfaceComboBox), true }
+        };
+
+        /// <summary>
+        /// Длина зубца.
+        /// </summary>
+        private Parameter _lengthOfTeeth = new Parameter
+        {
+            MaxValue = 200,
+            MinValue = 50,
+            Value = 100
         };
 
         /// <summary>
@@ -379,21 +379,15 @@
         {
             if (LengthOfTeethTextBox.Text != "")
             {
-                _lengthOfTeeth.Value = System.Convert.ToSingle(LengthOfTeethTextBox.Text);
-                if (!Validator.Validate(_lengthOfTeeth))
-                {
-                    LengthOfTeethTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(LengthOfTeethTextBox, "Длина зубьев должна быть в диапазоне от 50 до 200 мм");
-                    _dictionaryErrors[nameof(LengthOfTeethTextBox)] = false;
-                    CheckFormOnErrors();
-                }
-                else
-                {
-                    LengthOfTeethTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(LengthOfTeethTextBox, "");
-                    _dictionaryErrors[nameof(LengthOfTeethTextBox)] = true;
-                    CheckFormOnErrors();
-                }
+                Validator.ValidateValue(
+                    "Длина зубьев должна быть в диапазоне от 50 до 200 мм",
+                    ref _lengthOfTeeth,
+                    ref LengthOfTeethTextBox,
+                    ref _errorColor,
+                    ref _correctСolor,
+                    _toolTip,
+                    ref _dictionaryErrors);
+                CheckFormOnErrors();
             }
         }
 
@@ -401,21 +395,15 @@
         {
             if (HandleDiameterTextBox.Text != "")
             {
-                _handleDiameter.Value = System.Convert.ToSingle(HandleDiameterTextBox.Text);
-                if (!Validator.Validate(_handleDiameter))
-                {
-                    HandleDiameterTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(HandleDiameterTextBox, "Диаметр ручки должен быть в диапазоне от 20 до 30 мм");
-                    _dictionaryErrors[nameof(HandleDiameterTextBox)] = false;
-                    CheckFormOnErrors();
-                }
-                else
-                {
-                    HandleDiameterTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(HandleDiameterTextBox, "");
-                    _dictionaryErrors[nameof(HandleDiameterTextBox)] = true;
-                    CheckFormOnErrors();
-                }
+                Validator.ValidateValue(
+                    "Диаметр ручки должен быть в диапазоне от 20 до 30 мм",
+                    ref _handleDiameter,
+                    ref HandleDiameterTextBox,
+                    ref _errorColor,
+                    ref _correctСolor,
+                    _toolTip,
+                    ref _dictionaryErrors);
+                CheckFormOnErrors();
             }
         }
 
@@ -423,21 +411,15 @@
         {
             if (HandleLengthTextBox.Text != "")
             {
-                _handleLength.Value = System.Convert.ToSingle(HandleLengthTextBox.Text);
-                if (!Validator.Validate(_handleLength))
-                {
-                    HandleLengthTextBox.BackColor = _errorColor;
-                    _toolTip.SetToolTip(HandleLengthTextBox, "Длина ручки должна быть в диапазоне от 1000 до 2000 мм");
-                    _dictionaryErrors[nameof(HandleLengthTextBox)] = false;
-                    CheckFormOnErrors();
-                }
-                else
-                {
-                    HandleLengthTextBox.BackColor = _correctСolor;
-                    _toolTip.SetToolTip(HandleLengthTextBox, "");
-                    _dictionaryErrors[nameof(HandleLengthTextBox)] = true;
-                    CheckFormOnErrors();
-                }
+                Validator.ValidateValue(
+                    "Длина ручки должна быть в диапазоне от 1000 до 2000 мм",
+                    ref _handleLength,
+                    ref HandleLengthTextBox,
+                    ref _errorColor,
+                    ref _correctСolor,
+                    _toolTip,
+                    ref _dictionaryErrors);
+                CheckFormOnErrors();
             }
         }
 

@@ -226,6 +226,39 @@
         }
 
         /// <summary>
+        /// Валидировать значение.
+        /// </summary>
+        /// <param name="parameter">Параметр.</param>
+        /// <param name="textBox">TextBox.</param>
+        /// <param name="errorColor">Цвет ошибки.</param>
+        /// <param name="correctColor">Цвет корректности.</param>
+        /// <param name="toolTip">ToolTip.</param>
+        /// <param name="dictionaryErrors">Словарь ошибок.</param>
+        private static void ValidateValue(
+            string message,
+            ref Parameter parameter,
+            ref TextBox textBox,
+            ref Color errorColor,
+            ref Color correctColor,
+            ToolTip toolTip,
+            ref Dictionary<string, bool> dictionaryErrors)
+        {
+            parameter.Value = System.Convert.ToSingle(textBox.Text);
+            if (!Validator.Validate(parameter))
+            {
+                textBox.BackColor = errorColor;
+                toolTip.SetToolTip(textBox, message);
+                dictionaryErrors[nameof(textBox)] = false;
+            }
+            else
+            {
+                textBox.BackColor = correctColor;
+                toolTip.SetToolTip(textBox, "");
+                dictionaryErrors[nameof(textBox)] = true;
+            }
+        }
+
+        /// <summary>
         /// Построение фигуры.
         /// </summary>
         /// <param name="sender"></param>
@@ -379,7 +412,7 @@
         {
             if (LengthOfTeethTextBox.Text != "")
             {
-                Validator.ValidateValue(
+                ValidateValue(
                     "Длина зубьев должна быть в диапазоне от 50 до 200 мм",
                     ref _lengthOfTeeth,
                     ref LengthOfTeethTextBox,
@@ -395,7 +428,7 @@
         {
             if (HandleDiameterTextBox.Text != "")
             {
-                Validator.ValidateValue(
+                ValidateValue(
                     "Диаметр ручки должен быть в диапазоне от 20 до 30 мм",
                     ref _handleDiameter,
                     ref HandleDiameterTextBox,
@@ -411,7 +444,7 @@
         {
             if (HandleLengthTextBox.Text != "")
             {
-                Validator.ValidateValue(
+                ValidateValue(
                     "Длина ручки должна быть в диапазоне от 1000 до 2000 мм",
                     ref _handleLength,
                     ref HandleLengthTextBox,

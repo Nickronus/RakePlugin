@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RakePlugin.Model", "RakePlu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RakePlugin.Wrapper", "RakePlugin.Wrapper\RakePlugin.Wrapper.csproj", "{7CA586B2-FD5C-47A9-9631-59F50FB1610B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RakePlugin.Model.UnitTests", "RakePlugin.Model.UnitTests\RakePlugin.Model.UnitTests.csproj", "{BCDDD09A-E3BB-4452-8E7F-8A3FAFEADF45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7CA586B2-FD5C-47A9-9631-59F50FB1610B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CA586B2-FD5C-47A9-9631-59F50FB1610B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CA586B2-FD5C-47A9-9631-59F50FB1610B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCDDD09A-E3BB-4452-8E7F-8A3FAFEADF45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCDDD09A-E3BB-4452-8E7F-8A3FAFEADF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCDDD09A-E3BB-4452-8E7F-8A3FAFEADF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCDDD09A-E3BB-4452-8E7F-8A3FAFEADF45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
